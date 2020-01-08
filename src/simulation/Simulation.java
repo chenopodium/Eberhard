@@ -96,8 +96,8 @@ public class Simulation {
         }
         Engine engine = new Engine(new Settings(), in);
 
-       // engine.run(trials, values, true);
-        engine.findAngles(in);
+        engine.run(trials, values, true);
+      //  engine.findAngles(in);
         
         System.exit(0);
     }
