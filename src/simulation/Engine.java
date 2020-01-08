@@ -152,11 +152,7 @@ public class Engine {
         */
         int spinA = model.computeSpinB(A, photonAngle);
         int spinB = model.computeSpinB(B, photonAngle);
-
-        boolean debug = false;
-        if (debug) {
-            p("A=" + A + ", B=" + B + ", l=" + (int) photonAngle + ", spinA=" + spinA + ", spinB=" + spinB);
-        }
+       
         boolean det = (spinA >= 0 && spinB >= 0);
         boolean coinc = (spinA == spinB && spinB >= 0);
         if (write) {
