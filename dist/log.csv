@@ -1,4 +1,4 @@
-Date, Wed Jan 08 13:36:10 CET 2020
+Date, Wed Jan 08 13:40:39 CET 2020
 
 A1, 0.0
 A2, 1.0
@@ -100013,7 +100013,7 @@ Setting A, Setting B, Angle A, Angle B, Spin A, Spin B, Both Detected, Coinciden
 1, 1, 1.0, -39.0, 0, 1, 1, 0, 108.88
 
 
-J, N11++ - N12+0 - N210+ - N22++
+J, N11(++) - N12(+0) - N21(0+) - N22(++)
 (J > 0 is QM, J <=0 is classical)
 N11 ++, 12084.0
 N12 +0, 0.0

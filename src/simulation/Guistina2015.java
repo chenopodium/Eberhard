@@ -90,7 +90,7 @@ public class Guistina2015 extends Inequality {
         double n22 = getCounts().getPlusPlusCounts(1, 1);
 
         /* Using commas so that it can be imported into Excel */
-        String s = "\nJ, N11++ - N12+0 - N210+ - N22++";
+        String s = "\nJ, N11(++) - N12(+0) - N21(0+) - N22(++)";
         s += "\n(J > 0 is QM, J <=0 is classical)";
 
         s += "\nN11 ++, " + n11;

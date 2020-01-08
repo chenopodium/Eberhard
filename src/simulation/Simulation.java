@@ -42,18 +42,18 @@ public class Simulation {
         p("-trials nr trials: the number of pairs that are generated (default is 100000) (This is plenty... larger values just make it slower)");
         p("-inequality: CH or Guistina.");
         p("             CH uses N11 + N12 + N21 - N22 - singleA - singleB (<0 is classical)");
-        p("             Guistina uses N11++ - N12+0 - N210+ - N22++  (<0 is classical)");
+        p("             Guistina uses N11(++) - N12(+0) - N21(0+) - N22(++) (<0 is classical)");
         p("-model: Wang or Trivial");
-        p("             Trivial: trivial model  using sin(2*theta), just as a comparison to the other model");
-        p("             Wang (default): Want's model from the paper");
+        p("             Trivial: trivial model using something similar to sin(delta) for measurement, just as a comparison to the other model");
+        p("             Wang (default): F. Wang's model from the paper above");
         p("\nExamples:");
         p("java -jar simulation.jar  (all default values)");
         p("java -jar simulation.jar -file c:\\settings.csv -seed 12345  -inequality CH");
-        p("\nThe file with settingsshould be a simple text file with one line for each pair, such as:");
+        p("\nThe file with settings should be a simple text file with one line for each pair, such as:");
         p("0,1");
         p("0,0");
         p("1,0");
-        p("The first number is which angle to use for A (1 or 2), the second is which angle to use for B (1 or 2)");
+        p("The first number is which angle to use for A (0=a1 or 1=a2), the second is which angle to use for B (0=b1 or 1=b2)");
         p("\nThe results are written to a file summary.csv and also to a more detailed log.csv file with the input angles and counts for each run");
 
         int[][] values = null;
