@@ -153,11 +153,14 @@ public class Engine {
         int spinA = model.computeSpinB(A, photonAngle);
         int spinB = model.computeSpinB(B, photonAngle);
        
-        boolean det = (spinA >= 0 && spinB >= 0);
+        /* this is just for logging */
+        boolean detected = (spinA >= 0 && spinB >= 0);
         boolean coinc = (spinA == spinB && spinB >= 0);
         if (write) {
-            log += whichA + ", " + whichB + ", " + A + ", " + B + ", " + spinA + ", " + spinB + ", " + (det ? 1 : 0) + ", " + (coinc ? 1 : 0) + ", " + f.format(photonAngle) + "\n";
+            log += whichA + ", " + whichB + ", " + A + ", " + B + ", " + spinA + ", " + spinB + 
+                    ", " + (detected ? 1 : 0) + ", " + (coinc ? 1 : 0) + ", " + f.format(photonAngle) + "\n";
         }
+        /* Add the counts */
         counts.addResultOfOnePair(whichA, whichB, spinA, spinB);
 
         if (log.length() > 10000 && write) {
