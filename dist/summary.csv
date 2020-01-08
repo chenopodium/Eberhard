@@ -1,0 +1,20 @@
+Date, Tue Jan 07 09:43:27 CET 2020
+
+A1, 0.0
+A2, 2.0
+B1, 1.0
+B2, -45.0
+entanglementEfficiency, 0.6
+seed, 1234
+Trials, 100000
+
+J, N11++ - N12+0 - N210+ - N22++
+(J > 0 is QM, J <=0 is classical)
+N11 ++, 12236.0
+N12 +0, 0.0
+N21 0+, 49.0
+N22 ++, 4504.0
+J,7683.0
+J (prob),0.07683
+% detected, 83.07%
+Total count , 100000
