@@ -21,6 +21,7 @@ package simulation;
 
 /**
  * @see https://en.wikipedia.org/wiki/CHSH_inequality (there is a section on CH)
+ * @see https://pdfs.semanticscholar.org/8864/c5214a30a7acd8d186f53e8991cd8bc88f84.pdf
  * The CH inequality of the form N11 + N12 + N21 - N22 - singleA - singleB 
  * The value is <= 0 for classical experiments and >0 for QM
  * @author croth

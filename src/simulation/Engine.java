@@ -142,6 +142,14 @@ public class Engine {
         double A = settings.A[whichA];
         double B = settings.B[whichB];
 
+        /* Note: there is a asymmetrical model which breaks the inequality even more than the symmetrical one
+        in this case, use model.computeSpinA and computeSpinB for each side.
+        But, some people might complain about this since in real experiments, at least it is claimed
+        that the two sides are symmetrical.
+        So, to make sure there are no complaints like this, we can also just invoke
+        computeSpinB both times (please take a look at the code), which is symmetrical.
+        The inequality breaking is not that good in this case, but still good enough :-)
+        */
         int spinA = model.computeSpinB(A, photonAngle);
         int spinB = model.computeSpinB(B, photonAngle);
 

@@ -38,6 +38,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 @see https://pub.math.leidenuniv.nl/~gillrd/Peking/Peking_4.pdf
 @see https://en.wikipedia.org/wiki/CHSH_inequality
 @see https://plato.stanford.edu/entries/bell-theorem/
+@see https://pdfs.semanticscholar.org/8864/c5214a30a7acd8d186f53e8991cd8bc88f84.pdf
 @see http://www.askingwhy.org/blog/first-puzzle-just-a-probability/puzzle-piece-6-disentangling-the-entanglement/
  */
 public class Simulation {
