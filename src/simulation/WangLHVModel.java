@@ -41,6 +41,11 @@ public class WangLHVModel extends AbstractLHVModel {
     }
 
     /*
+    Compute the spin at detector A. 
+    There are two methods for A and B so that we can use an 
+    asymmetrical model. 
+    If you prefer to use a symmetrical model, just call the same 
+    method twice (compuetSpinB)
     @param angleA is the angle at detector A
     @param lamda is the hidden variable 
     @return
@@ -60,6 +65,11 @@ public class WangLHVModel extends AbstractLHVModel {
     }
 
     /*
+    Compute the spin at detector A. 
+    There are two methods for A and B so that we can use an 
+    asymmetrical model. 
+    If you prefer to use a symmetrical model, just call the same 
+    method twice (compuetSpinB)
     @param angleB is the angle at detector A
     @param lamda is the hidden variable 
     @return

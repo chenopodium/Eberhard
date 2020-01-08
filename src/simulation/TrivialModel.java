@@ -46,6 +46,12 @@ J (prob),0.0445
     }
 
     /*
+      Compute the spin at detector A. 
+    There are two methods for A and B so that we can use an 
+    asymmetrical model. 
+    If you prefer to use a symmetrical model, just call the same 
+    method twice (compuetSpinB)
+    Here, we use a symmetrical model
     @param angleA is the angle at detector A
     @param lamda is the hidden variable 
     @return
@@ -73,6 +79,12 @@ J (prob),0.0445
         else return -1;
     }
     /*
+      Compute the spin at detector A. 
+    There are two methods for A and B so that we can use an 
+    asymmetrical model. 
+    If you prefer to use a symmetrical model, just call the same 
+    method twice (compuetSpinB)
+    Here, we use a symmetrical model
     @param angleB is the angle at detector A
     @param lamda is the hidden variable 
     @return
