@@ -173,6 +173,10 @@ public class Engine {
         System.out.println(s);
     }
 
+    /* This method is just for me (Chantal), a super silly thing to find better angles :-).
+    I know I know, it could be optimized... but this was just quick way to get angles that
+    break the inequality for a situation where I could not compute it with any other means :-).
+    */
     public void findAngles(Inequality in) {
         double maxj = 0;
         Settings maxsettings = settings;
