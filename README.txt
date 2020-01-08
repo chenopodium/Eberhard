@@ -1,5 +1,9 @@
-This simulation uses the model by F. Wang
-https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf
+The purpose of this simulation is to show that a local realistic model can explain current experiments (at least up to 2019).
+The detection efficiency is greater than listed in the Guistina 2015 experiment and others in that year, who are currently
+the most important experiments in this field. 
+
+The model ist based on the paper by F. Wang https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf
+
 Arguments:
 -file filename: the file with random settings for A and B (see details below)
 -seed seed: the random seed (a number like 12346). The default is 1234
@@ -8,7 +12,8 @@ Arguments:
              CH uses N11 + N12 + N21 - N22 - singleA - singleB (<0 is classical)
              Guistina uses N11++ - N12+0 - N210+ - N22++  (<0 is classical)
 
-Example: java -jar simulation.jar -file c:\myrandomnumbers.txt -seed 12345  -inequality CH
+Example: 
+java -jar simulation.jar -file c:\myrandomnumbers.txt -seed 12345  -inequality CH
 
 The file should be a simple text file with one line for each pair, such as 1,2
 The first number is which angle to use for A (1 or 2), the second is which angle to use for B (1 or 2)
