@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 
 /**
- *
+ * Just a simple class that runs N trias with the given lhv model and inequality
  * @author croth
  */
 public class Engine {
@@ -38,6 +38,11 @@ public class Engine {
     String log;
     Inequality inequality;
 
+    /*
+    Just a simple class that runs N trias with the given lhv model and inequality
+    @param lhv a local hidden variable model
+    @param ineq an inequality (like CH)
+    */
     public Engine(AbstractLHVModel lhv, Inequality ineq) {
         this.model = lhv;
         if (model == null) {
@@ -53,6 +58,12 @@ public class Engine {
 
     }
 
+    /* Run given number of trials, and if value is specified,
+    uses the settings given in values.
+    @param trials number of trials
+    @values user supplied (random) settings for angles A and B
+    @param writeLog just a flag to write log file or not
+    */
     public double run(int trials, int[][] values, boolean writeLog) {
         counts = new Counts();
         String top = settings.toString();
@@ -127,6 +138,7 @@ public class Engine {
         return inequality.compute();
     }
 
+    /* just a simple helper method to write a log file */
     private void writeFile(String s, String file, boolean append) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file, append));
@@ -137,6 +149,14 @@ public class Engine {
         }
     }
 
+    /* Measure the spins for one pair of photons.
+    This can be done in a symmetrical way (use the same function for both detectors),
+    or in an asymmetrical way (see comment in the code below)
+    @param photonAngle hidden variable
+    @param whichA the angleA (0 or 1) for a1 or a2
+    @param whichB the angleB (0 or 1) for b1 or b2
+    @param write just a flag whether to write a log or not
+    */
     private void runOnePair(double photonAngle, int whichA, int whichB, boolean write) {
 
         double A = settings.A[whichA];
@@ -169,6 +189,7 @@ public class Engine {
         }
     }
 
+    /* pure lazyness :-) */
     private static void p(String s) {
         System.out.println(s);
     }
