@@ -13,16 +13,12 @@ public abstract class AbstractLHVModel {
 
     /* The settings to be used that contains the angles a1, a2, b1 and b2.
     It also contains the entanglement efficiency
-    */
+     */
     protected Settings settings;
-
-    /* The entanglement efficiency */
-    protected double r;
 
     public AbstractLHVModel(Settings settings) {
         this.settings = settings;
-        r = settings.entanglementEfficiency;
-
+      
     }
 
     /*
@@ -44,5 +40,9 @@ public abstract class AbstractLHVModel {
      -1 means no detection
      */
     public abstract int computeSpinB(double angleB, double lambda);
+
+    public Settings getSettings() {
+        return settings;
+    }
 
 }

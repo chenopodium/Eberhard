@@ -28,8 +28,10 @@ public class Guistina2015 extends Inequality {
      /* The angles to use in degrees for detector A and B */
     //private double[] A = {0, 2};
     // private double[] B = {1, -45};
-    private double[] A = {16, 88};
-    private double[] B = {15, 0};
+    
+   
+    private double[] A = {0, 1};
+    private double[] B = {2, -39};
 
     /*
      @return the preferred angles at detector A in degrees (such as 0, 45)

@@ -38,12 +38,18 @@ public class Engine {
     String log;
     Inequality inequality;
 
-    public Engine(Settings settings, Inequality ineq) {
-        this.settings = settings;
-        this.settings.A = ineq.getPreferredA();
-        this.settings.B = ineq.getPreferredB();
+    public Engine(AbstractLHVModel lhv, Inequality ineq) {
+        this.model = lhv;
+        if (model == null) {
+            model = new WangLHVModel(settings);
+        }
+        this.settings = model.getSettings();
         this.inequality = ineq;
-        model = new WangLHVModel(settings);
+        if (inequality == null) {
+            inequality = new CH();
+        }
+        this.settings.A = inequality.getPreferredA();
+        this.settings.B = ineq.getPreferredB();
 
     }
 
@@ -65,6 +71,8 @@ public class Engine {
 
         if (writeLog) {
             top += "\nTrials, " + trials;
+            top += "\nModel, " + model.getClass().getName();
+            top += "\nInequality, " + inequality.getClass().getName();
             p(top);
             log = top + "\n\nSetting A, Setting B, Angle A, Angle B, Spin A, Spin B, Both Detected, Coincidence, Hidden variable\n";
             writeFile(log, "log.csv", false);
@@ -123,9 +131,9 @@ public class Engine {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file, append));
             writer.write(s);
-
             writer.close();
         } catch (IOException e) {
+            p("Could not write fiel " + file + " because " + e.getMessage());
         }
     }
 
@@ -196,7 +204,8 @@ public class Engine {
                                 in.computeString();
 
                             }
-                            p(count + ": " + greenBold + settings.toShortString() + ", j=" + j + reset);
+                            p(count + ": " + greenBold + settings.toShortString() + ", j=" + j + reset
+                                    + ", " + f.format(counts.getPercentBothDetected()) + "% detected");
                         }
                         if (j >= 0) {
                             if (j >= maxj) {
@@ -204,7 +213,7 @@ public class Engine {
                                 maxsettings = settings;
                                 p(maxsettings.toShortString());
                                 p("j=" + maxj);
-                                 in.setCounts(counts);//new Guistina2015(counts);
+                                in.setCounts(counts);//new Guistina2015(counts);
                                 in.computeString();
                                 p("\n% detected, " + f.format(counts.getPercentBothDetected()) + "%");
                             }

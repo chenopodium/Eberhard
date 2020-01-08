@@ -111,6 +111,7 @@ public class WangLHVModel extends AbstractLHVModel {
         double b = Math.toRadians(angle);
         double c = Math.cos(b);
         double s = Math.sin(b);
+        double r= settings.entanglementEfficiency;
         return (r * r * c * c + s * s) / (1 + r * r);
     }
 
@@ -121,6 +122,7 @@ public class WangLHVModel extends AbstractLHVModel {
         double b = Math.toRadians(angle);
         double c = Math.cos(b);
         double s = Math.sin(b);
+        double r= settings.entanglementEfficiency;
         return (r * r * s * s + c * c) / (1 + r * r);
     }
 
@@ -131,6 +133,7 @@ public class WangLHVModel extends AbstractLHVModel {
         double b = Math.toRadians(angle);
         double c = Math.cos(b);
         double s = Math.sin(b);
+        double r= settings.entanglementEfficiency;
         double t = (r * r * c * c - s * s) / (r * r * c * c + s * s);
         double theta = Math.acos(t) / 2.0;
         return Math.toDegrees(theta);
@@ -143,6 +146,7 @@ public class WangLHVModel extends AbstractLHVModel {
         double b = Math.toRadians(angle);
         double c = Math.cos(b);
         double s = Math.sin(b);
+        double r= settings.entanglementEfficiency;
         double t = (-r * r * s * s + c * c) / (r * r * s * s + c * c);
         double theta = Math.acos(t) / 2.0;
         return Math.toDegrees(theta);

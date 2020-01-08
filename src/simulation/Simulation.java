@@ -43,15 +43,25 @@ public class Simulation {
         p("-inequality: CH or Guistina.");
         p("             CH uses N11 + N12 + N21 - N22 - singleA - singleB (<0 is classical)");
         p("             Guistina uses N11++ - N12+0 - N210+ - N22++  (<0 is classical)");
-        p("\nExample: java -jar simulation.jar -file c:\\myrandomnumbers.txt -seed 12345  -inequality CH");
-        p("\nThe file should be a simple text file with one line for each pair, such as 1,2");
+        p("-model: Wang or Trivial");
+        p("             Trivial: trivial model  using sin(2*theta), just as a comparison to the other model");
+        p("             Wang (default): Want's model from the paper");
+        p("\nExamples:");
+        p("java -jar simulation.jar  (all default values)");
+        p("java -jar simulation.jar -file c:\\settings.csv -seed 12345  -inequality CH");
+        p("\nThe file with settingsshould be a simple text file with one line for each pair, such as:");
+        p("0,1");
+        p("0,0");
+        p("1,0");
         p("The first number is which angle to use for A (1 or 2), the second is which angle to use for B (1 or 2)");
         p("\nThe results are written to a file summary.csv and also to a more detailed log.csv file with the input angles and counts for each run");
 
         int[][] values = null;
         long seed = 1234;
-        String model = "G";
+        String ineq = "G";
+        String model = "W";
         int trials = 100000;
+        
         if (args != null && args.length > 1) {
             for (int i = 0; i + 1 < args.length; i += 2) {
                 String key = args[i].toUpperCase();
@@ -78,9 +88,16 @@ public class Simulation {
                 } else if (key.startsWith("I")) {
                     value = value.toUpperCase();
                     if (value.startsWith("C")) {
-                        model = "CH";
+                        ineq = "CH";
                     } else if (value.startsWith("G")) {
-                        model = "GUISTINA";
+                        ineq = "GUISTINA";
+                    }
+                } else if (key.startsWith("M")) {
+                    value = value.toUpperCase();
+                    if (value.startsWith("T")) {
+                        ineq = "TRIVIAL";
+                    } else if (value.startsWith("W")) {
+                        ineq = "WANG";
                     }
                 }
 
@@ -89,16 +106,26 @@ public class Simulation {
         }
         Rand.setSeed(seed);
         Inequality in;
-        if (model.startsWith("C")) {
+        AbstractLHVModel lhv;
+        if (ineq.startsWith("C")) {
             in = new CH();
+
         } else {
             in = new Guistina2015();
         }
-        Engine engine = new Engine(new Settings(), in);
+        Settings settings = new Settings();
+        if (model.startsWith("T")) {
+            lhv = new TrivialModel(settings);
+
+        } else {
+            lhv = new WangLHVModel(settings);
+        }
+        
+        Engine engine = new Engine(lhv, in);
 
         engine.run(trials, values, true);
-      //  engine.findAngles(in);
-        
+       // engine.findAngles(in);
+
         System.exit(0);
     }
 
@@ -109,7 +136,7 @@ public class Simulation {
     The second value is the setting to be used at detector B (anngle b1 or b2)
     The values should be separated by , or ; or tab (but consistently :-)
     Only 0 and 1 are allowed (as there are only 2 settings per detector :-)
-    */
+     */
     private static int[][] readSettings(File file) {
         ArrayList<String> lines = new ArrayList<>();
         String sep = null;
@@ -133,7 +160,7 @@ public class Simulation {
                     } else {
                         continue;
                     }
-                    p("Using separator "+sep);
+                    p("Using separator " + sep);
                 }
                 lines.add(line);
             }
@@ -149,7 +176,7 @@ public class Simulation {
             values[pos][0] = -1;
             values[pos][1] = -1;
             if (it.length < 2) {
-                p("Setting " + line + " is not valid. Expecting 2 values, but got "+it.length+". Values is "+Arrays.toString(it));
+                p("Setting " + line + " is not valid. Expecting 2 values, but got " + it.length + ". Values is " + Arrays.toString(it));
                 continue;
             }
             int s0 = Integer.parseInt(it[0]);
@@ -162,7 +189,7 @@ public class Simulation {
             values[pos][1] = s1;
 
         }
-        p("Found "+values.length+" settings in file "+file);
+        p("Found " + values.length + " settings in file " + file);
         return values;
     }
 
