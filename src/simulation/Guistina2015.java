@@ -22,6 +22,8 @@ package simulation;
 /**
  *
  * @author croth
+ * @see https://journals.aps.org/prl/supplemental/10.1103/PhysRevLett.115.250401/Supplemental_material_final.pdf
+ * @see https://physics.aps.org/featured-article-pdf/10.1103/PhysRevLett.115.250401
  */
 public class Guistina2015 extends Inequality {
 

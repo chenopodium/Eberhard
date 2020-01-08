@@ -20,6 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package simulation;
 
 /**
+ * @see https://en.wikipedia.org/wiki/CHSH_inequality (there is a section on CH)
  * The CH inequality of the form N11 + N12 + N21 - N22 - singleA - singleB 
  * The value is <= 0 for classical experiments and >0 for QM
  * @author croth

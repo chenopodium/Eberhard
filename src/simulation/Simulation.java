@@ -30,6 +30,15 @@ LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE A
 IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+@author Chantal Roth
+@see https://journals.aps.org/prl/supplemental/10.1103/PhysRevLett.115.250401/Supplemental_material_final.pdf
+@see https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf
+@see https://physics.aps.org/featured-article-pdf/10.1103/PhysRevLett.115.250401
+@see https://pub.math.leidenuniv.nl/~gillrd/Peking/Peking_4.pdf
+@see https://en.wikipedia.org/wiki/CHSH_inequality
+@see https://plato.stanford.edu/entries/bell-theorem/
+@see http://www.askingwhy.org/blog/first-puzzle-just-a-probability/puzzle-piece-6-disentangling-the-entanglement/
  */
 public class Simulation {
 
