@@ -1,6 +1,7 @@
-The purpose of this simulation is to show that a local realistic model can explain current experiments (at least up to 2019).
-The detection efficiency is greater than listed in the Guistina 2015 experiment and others in that year, who are currently
-the most important experiments in this field. 
+The purpose of this simulation is to check if a local realistic model can explain Bell type experiments.
+If the detection efficiency is greater than in the experiments (such as Guistina 2015), then it means
+a LHV is still possible. If the experiment has better detection efficiency than the critical efficiency 
+(please see https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf), then a LHV can no longer explain it.
 
 References:
 https://pdfs.semanticscholar.org/8864/c5214a30a7acd8d186f53e8991cd8bc88f84.pdf
