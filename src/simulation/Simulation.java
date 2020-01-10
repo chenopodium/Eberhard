@@ -49,7 +49,7 @@ public class Simulation {
 
     /* Main method and entry point for the program */
     public static void main(String[] args) {
-        p("Please see the readme.txt for instruction");
+        p("Please see the README.TXT for instructions");
         /*
         p("Arguments:");
         p("-file filename: the file with random settings for A and B (see details below)");
