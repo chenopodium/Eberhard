@@ -20,6 +20,10 @@ Arguments:
 -file filename: the file with random settings for A and B (see details below)
 -seed seed: the random seed (a number like 12346). The default is 1234
 -trials nr trials: the number of pairs that are generated (default is 100000) (This is plenty... larger values just make it slower)
+-mode: CONTINUE or RESTART
+             RESTART: (default) Clear all data and start from scratch
+             CONTINUE: loads the last run with all data and settings, and continues with the specified nr of trials
+
 -inequality: CH or Guistina.
              CH uses N11 + N12 + N21 - N22 - singleA - singleB (<0 is classical)
              Guistina uses N11(++) - N12(+0) - N21(0+) - N22(++) (<0 is classical)
