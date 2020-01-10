@@ -84,7 +84,6 @@ public class Engine {
             top += "\nTrials, " + trials;
             top += "\nModel, " + model.getClass().getName();
             top += "\nInequality, " + inequality.getClass().getName();
-            p(top);
             log = top + "\n\nSetting A, Setting B, Angle A, Angle B, Spin A, Spin B, Both Detected, Coincidence, Hidden variable\n";
             writeFile(log, "log.csv", false);
         }
@@ -131,6 +130,7 @@ public class Engine {
             end += "\nTotal count , " + counts.getTotalTrials() + "";
             log += end;
             String summary = top + end;
+            
             p(end);
             writeFile(log, "log.csv", true);
             writeFile(summary, "summary.csv", false);

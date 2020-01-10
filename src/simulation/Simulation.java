@@ -65,7 +65,7 @@ public class Simulation {
         p("1,0");
         p("The first number is which angle to use for A (0=a1 or 1=a2), the second is which angle to use for B (0=b1 or 1=b2)");
         p("\nThe results are written to a file summary.csv and also to a more detailed log.csv file with the input angles and counts for each run");
-
+        p("---------------------------------- EXPERIMENET ---------------------------------\n");
         int[][] values = null;
         long seed = 1234;
         String ineq = "G";

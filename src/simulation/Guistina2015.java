@@ -109,7 +109,7 @@ public class Guistina2015 extends Inequality {
         double pj = j / tot;
 
         s += "\nJ (prob)," + pj;
-        p(s);
+      
         return s;
     }
 

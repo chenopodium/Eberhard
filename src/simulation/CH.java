@@ -101,7 +101,7 @@ public class CH extends Inequality {
         double pj = j / tot;
 
         s += "\nJ (prob)," + pj;
-        p(s);
+       
         return s;
     }
 
