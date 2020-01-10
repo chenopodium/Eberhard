@@ -19,6 +19,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package simulation;
 
+import java.io.Serializable;
+
 /**
  * @see https://en.wikipedia.org/wiki/CHSH_inequality (there is a section on CH)
  * @see https://pdfs.semanticscholar.org/8864/c5214a30a7acd8d186f53e8991cd8bc88f84.pdf
@@ -26,10 +28,11 @@ package simulation;
  * The value is <= 0 for classical experiments and >0 for QM
  * @author croth
  */
-public class CH extends Inequality {
+public class CH extends Inequality implements Serializable{
+    private static final long serialversionUID =1L; 
 
-    /* The angles to use in degrees for detector A and B */
-    private double[] A = {0, 45};
+    /* The angles in degrees to use in degrees for detector A and B */
+    private double[] A = {0, 45};  
     private double[] B = {-180 / 16.0, 180 / 16.0};
 
     public CH() {
@@ -100,7 +103,7 @@ public class CH extends Inequality {
 
         double pj = j / tot;
 
-        s += "\nJ (prob)," + pj;
+        s += "\nJ/total," + pj;
        
         return s;
     }

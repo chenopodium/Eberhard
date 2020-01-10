@@ -7,8 +7,12 @@ package simulation;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -45,7 +49,8 @@ public class Simulation {
 
     /* Main method and entry point for the program */
     public static void main(String[] args) {
-        p("This simulation uses the model by F. Wang\n" + "https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf");
+        p("Please see the readme.txt for instruction");
+        /*
         p("Arguments:");
         p("-file filename: the file with random settings for A and B (see details below)");
         p("-seed seed: the random seed (a number like 12346). The default is 1234");
@@ -59,19 +64,17 @@ public class Simulation {
         p("\nExamples:");
         p("java -jar simulation.jar  (all default values)");
         p("java -jar simulation.jar -file c:\\settings.csv -seed 12345  -inequality CH");
-        p("\nThe file with settings should be a simple text file with one line for each pair, such as:");
-        p("0,1");
-        p("0,0");
-        p("1,0");
-        p("The first number is which angle to use for A (0=a1 or 1=a2), the second is which angle to use for B (0=b1 or 1=b2)");
         p("\nThe results are written to a file summary.csv and also to a more detailed log.csv file with the input angles and counts for each run");
         p("---------------------------------- EXPERIMENET ---------------------------------\n");
+        */
         int[][] values = null;
         long seed = 1234;
         String ineq = "G";
         String model = "W";
+        String mode ="RESTART";
+        String statefile="saved.ser";
         int trials = 100000;
-        
+
         if (args != null && args.length > 1) {
             for (int i = 0; i + 1 < args.length; i += 2) {
                 String key = args[i].toUpperCase();
@@ -102,40 +105,59 @@ public class Simulation {
                     } else if (value.startsWith("G")) {
                         ineq = "GUISTINA";
                     }
-                } else if (key.startsWith("M")) {
+                } else if (key.startsWith("MODEL")) {
                     value = value.toUpperCase();
                     if (value.startsWith("T")) {
                         ineq = "TRIVIAL";
                     } else if (value.startsWith("W")) {
                         ineq = "WANG";
                     }
+                }else if (key.startsWith("MODE")) {
+                    value = value.toUpperCase();
+                    if (value.startsWith("C")) {
+                        mode = "CONTINUE";
+                    } else mode = "RESTART";
+                    
                 }
 
             }
 
         }
-        Rand.setSeed(seed);
-        Inequality in;
-        AbstractLHVModel lhv;
-        if (ineq.startsWith("C")) {
-            in = new CH();
-
-        } else {
-            in = new Guistina2015();
-        }
-        Settings settings = new Settings();
-        if (model.startsWith("T")) {
-            lhv = new TrivialModel(settings);
-
-        } else {
-            lhv = new WangLHVModel(settings);
-        }
         
-        Engine engine = new Engine(lhv, in);
+        Engine engine = null;
+        if (mode.equalsIgnoreCase("CONTINUE")) {
+            p("Attempting to continue last run using file "+statefile);
+             engine=loadModel(statefile);
+             if (engine == null) {
+                 p("I was not able to read the file "+statefile);
+             }
+        }
+        else {
+            Settings settings = new Settings();
+            settings.setSeed(seed);
+            Rand.setSeed(seed);
+            Inequality in;
+            AbstractLHVModel lhv;
+            if (ineq.startsWith("C")) {
+                in = new CH();
 
-        engine.run(trials, values, true);
-       // engine.findAngles(in);
+            } else {
+                in = new Guistina2015();
+            }
 
+            if (model.startsWith("T")) {
+                lhv = new TrivialModel(settings);
+
+            } else {
+                lhv = new WangLHVModel(settings);
+            }
+
+            engine = new Engine(lhv, in);
+        }
+        engine.run(trials, values, true );
+       
+        // save model to a file with all settings, in case we want to continue
+        saveModel(engine, statefile);
         System.exit(0);
     }
 
@@ -207,4 +229,34 @@ public class Simulation {
         System.out.println(s);
     }
 
+    private static Engine loadModel(String filename) {
+         try { 
+            FileInputStream file = new FileInputStream  (filename); 
+            ObjectInputStream in = new ObjectInputStream  (file); 
+  
+            Engine engine= (Engine)in.readObject(); 
+  
+            in.close(); 
+            file.close(); 
+            return engine;
+        }   
+        catch (Exception ex) { 
+            p("I could not read the saved state from file "+filename+" because: "+ex.getMessage());
+            ex.printStackTrace();
+        } 
+         return null;
+    }
+    private static void saveModel(Engine engine, String filename) {
+         try {   
+            // Saving the current counts, seed and settings to a file 
+            FileOutputStream file = new FileOutputStream(filename); 
+            ObjectOutputStream out = new ObjectOutputStream (file); 
+            out.writeObject(engine);   
+            out.close(); 
+            file.close();   
+        }   
+        catch (IOException ex) { 
+            p("I could not save the current state to file "+filename+" because: "+ex.getMessage());
+        } 
+    }
 }

@@ -22,13 +22,15 @@ package simulation;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
 /**
  * Just a simple class that runs N trias with the given lhv model and inequality
  * @author croth
  */
-public class Engine {
+public class Engine implements Serializable{
+    private static final long serialversionUID =1L; 
 
     static DecimalFormat f = new DecimalFormat("#.##");
     Settings settings;
@@ -53,8 +55,8 @@ public class Engine {
         if (inequality == null) {
             inequality = new CH();
         }
-        this.settings.A = inequality.getPreferredA();
-        this.settings.B = ineq.getPreferredB();
+        this.settings.setA(inequality.getPreferredA());
+        this.settings.setB(ineq.getPreferredB());
 
     }
 
@@ -65,7 +67,7 @@ public class Engine {
     @param writeLog just a flag to write log file or not
     */
     public double run(int trials, int[][] values, boolean writeLog) {
-        counts = new Counts();
+        if (counts == null) counts = new Counts();
         String top = settings.toString();
 
         if (values != null && values.length > 0) {
@@ -73,10 +75,10 @@ public class Engine {
                 p("Using user supplied random settings for angles (" + values.length + " values)");
             }
             trials = values.length;
-            settings.angleGenerator = Settings.LAMBDAGENERATOR.SUPPLIED;
+            settings.setAngleGenerator(Settings.LAMBDAGENERATOR.SUPPLIED);
         } else {
             if (writeLog) {
-                p("Using random setting " + settings.angleGenerator);
+                p("Using random setting " + settings.getAngleGenerator());
             }
         }
 
@@ -85,10 +87,11 @@ public class Engine {
             top += "\nModel, " + model.getClass().getName();
             top += "\nInequality, " + inequality.getClass().getName();
             log = top + "\n\nSetting A, Setting B, Angle A, Angle B, Spin A, Spin B, Both Detected, Coincidence, Hidden variable\n";
+            p(top);
             writeFile(log, "log.csv", false);
         }
         log = "";
-        if (settings.angleGenerator == Settings.LAMBDAGENERATOR.SUPPLIED) {
+        if (settings.getAngleGenerator() == Settings.LAMBDAGENERATOR.SUPPLIED) {
             for (int t = 0; t < trials; t++) {
                 if (values[t][0] >= 0 && values[t][1] >= 0) {
                     runOnePair(rand.randDouble(0, 180), values[t][0], values[t][1], writeLog);
@@ -99,7 +102,7 @@ public class Engine {
                     p("Found illegal settings " + values[t][0] + "/" + values[t][1]);
                 }
             }
-        } else if (settings.angleGenerator == Settings.LAMBDAGENERATOR.RANDOMANGLES) {
+        } else if (settings.getAngleGenerator() == Settings.LAMBDAGENERATOR.RANDOMANGLES) {
             for (int t = 0; t < trials; t++) {
                 int whichA = rand.randInt(0, 1);
                 int whichB = rand.randInt(0, 1);
@@ -153,14 +156,14 @@ public class Engine {
     This can be done in a symmetrical way (use the same function for both detectors),
     or in an asymmetrical way (see comment in the code below)
     @param photonAngle hidden variable
-    @param whichA the angleA (0 or 1) for a1 or a2
-    @param whichB the angleB (0 or 1) for b1 or b2
+    @param whichA the angleA (0 or 1) for a1 or a2 (these angles are in degrees)
+    @param whichB the angleB (0 or 1) for b1 or b2 (these angles are in degrees)
     @param write just a flag whether to write a log or not
     */
-    private void runOnePair(double photonAngle, int whichA, int whichB, boolean write) {
+    private void runOnePair(double photonAngleDegree, int whichA, int whichB, boolean write) {
 
-        double A = settings.A[whichA];
-        double B = settings.B[whichB];
+        double A = settings.getA()[whichA];
+        double B = settings.getB()[whichB];
 
         /* Note: there is a asymmetrical model which breaks the inequality even more than the symmetrical one
         in this case, use model.computeSpinA and model.computeSpinB for each side.
@@ -170,15 +173,15 @@ public class Engine {
         computeSpinB both times (please take a look at the code), which is symmetrical.
         The inequality breaking is not that good in this case, but still good enough :-)
         */
-        int spinA = model.computeSpinB(A, photonAngle);
-        int spinB = model.computeSpinB(B, photonAngle);
+        int spinA = model.computeSpinB(A, photonAngleDegree);
+        int spinB = model.computeSpinB(B, photonAngleDegree);
        
         /* this is just for logging */
         boolean detected = (spinA >= 0 && spinB >= 0);
         boolean coinc = (spinA == spinB && spinB >= 0);
         if (write) {
             log += whichA + ", " + whichB + ", " + A + ", " + B + ", " + spinA + ", " + spinB + 
-                    ", " + (detected ? 1 : 0) + ", " + (coinc ? 1 : 0) + ", " + f.format(photonAngle) + "\n";
+                    ", " + (detected ? 1 : 0) + ", " + (coinc ? 1 : 0) + ", " + f.format(photonAngleDegree) + "\n";
         }
         /* Add the counts */
         counts.addResultOfOnePair(whichA, whichB, spinA, spinB);
@@ -203,22 +206,22 @@ public class Engine {
         Settings maxsettings = settings;
         long count = 0;
         for (double a1 = 0; a1 < 90; a1++) {
-            settings.A[0] = a1;
+            settings.getA()[0] = a1;
 
             for (double a2 = 1; a2 < 90; a2++) {
                 if (a1 == a2) {
                     continue;
                 }
-                settings.A[1] = a2;
+                settings.getA()[1] = a2;
 
                 for (double b1 = 0; b1 < 45; b1++) {
-                    settings.B[0] = b1;
+                    settings.getB()[0] = b1;
 
                     if (b1 == a1 || b1 == a2) {
                         continue;
                     }
                     for (double b2 = -45; b2 < 45; b2++) {
-                        settings.B[1] = b2;
+                        settings.getB()[1] = b2;
 
                         if (b1 == b2 || b1 == a1 || b1 == a1) {
                             continue;

@@ -19,14 +19,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package simulation;
 
+import java.io.Serializable;
+
 /**
  * This is more like a negative control of a super trivial "model"
  *
  * 
  * @author croth
  */
-public class TrivialModel extends AbstractLHVModel {
-
+public class TrivialModel extends AbstractLHVModel implements Serializable{
+    private static final long serialversionUID =1L; 
     /*
     A dummy model, but it can still break it :-)
     
@@ -52,8 +54,8 @@ J (prob),0.0445
     If you prefer to use a symmetrical model, just call the same 
     method twice (compuetSpinB)
     Here, we use a symmetrical model
-    @param angleA is the angle at detector A
-    @param lamda is the hidden variable 
+    @param angleA is the angle at detector A in degrees
+    @param lambda is the hidden variable (can be anything, usually an angle)
     @return
      +1 means plus
       0 means zero (extraordinary)
@@ -69,11 +71,11 @@ J (prob),0.0445
         double a = Math.toRadians(delta);
         
         double pdetect = 2.3*Math.abs(Math.sin(a));
-   //     p("angle="+angle+", delta="+delta+", p="+pdetect);
+   
         if (Rand.randDouble()<=pdetect) {
             int spin = -(int) Math.signum(Math.sin(a)); 
             if (spin <0) spin =1;
-        //    p("Spin: "+spin);
+        
             return spin;
         }
         else return -1;
@@ -85,8 +87,8 @@ J (prob),0.0445
     If you prefer to use a symmetrical model, just call the same 
     method twice (compuetSpinB)
     Here, we use a symmetrical model
-    @param angleB is the angle at detector A
-    @param lamda is the hidden variable 
+    @param angleB is the angle at detector A in degrees
+    @param lamda is the hidden variable (can be anything, usually an angle)
     @return
      +1 means plus
       0 means zero (extraordinary)

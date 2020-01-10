@@ -5,12 +5,14 @@
  */
 package simulation;
 
+import java.io.Serializable;
+
 /**
  *
  * @author croth
  */
-public abstract class AbstractLHVModel {
-
+public abstract class AbstractLHVModel implements Serializable{
+    private static final long serialversionUID =1L; 
     /* The settings to be used that contains the angles a1, a2, b1 and b2.
     It also contains the entanglement efficiency
      */

@@ -19,15 +19,17 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package simulation;
 
+import java.io.Serializable;
+
 /**
  *
  * @author croth
  * @see https://journals.aps.org/prl/supplemental/10.1103/PhysRevLett.115.250401/Supplemental_material_final.pdf
  * @see https://physics.aps.org/featured-article-pdf/10.1103/PhysRevLett.115.250401
  */
-public class Guistina2015 extends Inequality {
-
-     /* The angles to use in degrees for detector A and B */
+public class Guistina2015 extends Inequality implements Serializable{
+    private static final long serialversionUID =1L; 
+     /* The angles  in degrees to use in degrees for detector A and B */
     //private double[] A = {0, 2};
     // private double[] B = {1, -45};
     
@@ -108,7 +110,7 @@ public class Guistina2015 extends Inequality {
 
         double pj = j / tot;
 
-        s += "\nJ (prob)," + pj;
+        s += "\nJ/total," + pj;
       
         return s;
     }

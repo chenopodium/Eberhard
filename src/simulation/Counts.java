@@ -19,12 +19,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package simulation;
 
+import java.io.Serializable;
+
 /**
  * Siimple class that counts the results of pairwise measurements
  *
  * @author croth
  */
-public class Counts {
+public class Counts implements Serializable{
+    private static final long serialversionUID =1L; 
 
     private int singleA;
     private int singleB;

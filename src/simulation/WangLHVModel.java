@@ -19,6 +19,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package simulation;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * A simple LHV simulation that breaks the CH inequality (and derivations
@@ -30,8 +32,8 @@ package simulation;
  * @see https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf
  * @author croth
  */
-public class WangLHVModel extends AbstractLHVModel {
-
+public class WangLHVModel extends AbstractLHVModel implements Serializable{
+    private static final long serialversionUID =1L; 
     /*
     @see https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf
      */
@@ -46,8 +48,8 @@ public class WangLHVModel extends AbstractLHVModel {
     asymmetrical model. 
     If you prefer to use a symmetrical model, just call the same 
     method twice (compuetSpinB)
-    @param angleA is the angle at detector A
-    @param lamda is the hidden variable 
+    @param angleA is the angle at detector A in degrees
+    @param lamda is the hidden variable (can be anything, usually an angle)
     @return
      +1 means plus
       0 means zero (extraordinary)
@@ -70,8 +72,8 @@ public class WangLHVModel extends AbstractLHVModel {
     asymmetrical model. 
     If you prefer to use a symmetrical model, just call the same 
     method twice (compuetSpinB)
-    @param angleB is the angle at detector A
-    @param lamda is the hidden variable 
+    @param angleB is the angle at detector A in degrees
+    @param lamda is the hidden variable (can be anything, usually an angle)
     @return
      +1 means plus
       0 means zero (extraordinary)
@@ -116,23 +118,25 @@ public class WangLHVModel extends AbstractLHVModel {
 
     /*
     @see https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf
+    @param angle is in degrees
      */
     private double PbPlus(double angle) {
         double b = Math.toRadians(angle);
         double c = Math.cos(b);
         double s = Math.sin(b);
-        double r= settings.entanglementEfficiency;
+        double r= settings.getEntanglementEfficiency();
         return (r * r * c * c + s * s) / (1 + r * r);
     }
 
     /*
     @see https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf
+     @param angle is in degrees
      */
     private double PbMinus(double angle) {
         double b = Math.toRadians(angle);
         double c = Math.cos(b);
         double s = Math.sin(b);
-        double r= settings.entanglementEfficiency;
+        double r= settings.getEntanglementEfficiency();
         return (r * r * s * s + c * c) / (1 + r * r);
     }
 
@@ -143,7 +147,7 @@ public class WangLHVModel extends AbstractLHVModel {
         double b = Math.toRadians(angle);
         double c = Math.cos(b);
         double s = Math.sin(b);
-        double r= settings.entanglementEfficiency;
+        double r= settings.getEntanglementEfficiency();
         double t = (r * r * c * c - s * s) / (r * r * c * c + s * s);
         double theta = Math.acos(t) / 2.0;
         return Math.toDegrees(theta);
@@ -151,12 +155,13 @@ public class WangLHVModel extends AbstractLHVModel {
 
     /*
     @see https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf
+     @param angle is in degrees
      */
     private double thetaMinus(double angle) {
         double b = Math.toRadians(angle);
         double c = Math.cos(b);
         double s = Math.sin(b);
-        double r= settings.entanglementEfficiency;
+        double r= settings.getEntanglementEfficiency();
         double t = (-r * r * s * s + c * c) / (r * r * s * s + c * c);
         double theta = Math.acos(t) / 2.0;
         return Math.toDegrees(theta);

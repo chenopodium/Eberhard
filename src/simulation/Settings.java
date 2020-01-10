@@ -19,44 +19,117 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package simulation;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author croth
  */
-public class Settings {
-
+public class Settings implements Serializable{
+    private static final long serialversionUID =1L; 
     /* The entanglement efficiency to use (referred to as r in many cases ) */
-    public double entanglementEfficiency = 0.7; //r in the  paper from F. Wang
+    private double entanglementEfficiency = 0.7; //r in the  paper from F. Wang
 
     /*
-    The (default) angles to use at the detectors in degrees.
+    The (default) angles in degrees to use at the detectors in degrees.
     Note that these values are overwritten by the inequality
      */
-    public double[] A = {0, 45};
-    public double[] B = {-180 / 16.0, 180 / 16.0};
+    private double[] A = {0, 45};
+    private double[] B = {-180 / 16.0, 180 / 16.0};
+    private long seed = 1234;
 
-    public LAMBDAGENERATOR angleGenerator = LAMBDAGENERATOR.RANDOMANGLES;
+    private LAMBDAGENERATOR angleGenerator = LAMBDAGENERATOR.RANDOMANGLES;
 
     public enum LAMBDAGENERATOR {
         RANDOMANGLES, ITERATE, SUPPLIED
     }
 
     public String toShortString() {
-        return  "A1, " + A[0] 
-                + " A2, " + A[1] 
-                + " B1, " + B[0] 
-                + " B2, " + B[1];
+        return  "A1, " + getA()[0] 
+                + " A2, " + getA()[1] 
+                + " B1, " + getB()[0] 
+                + " B2, " + getB()[1];
     }
     @Override
     public String toString() {
-        return "Date, " + (new Date(System.currentTimeMillis()).toString() + "\n\n"
-                + "A1, " + A[0] + "\n"
-                + "A2, " + A[1] + "\n"
-                + "B1, " + B[0] + "\n"
-                + "B2, " + B[1] + "\n"
-                + "entanglementEfficiency, " + entanglementEfficiency + "\n"
-                + "seed, " + Rand.getSeed());
+        return "Date, " + (new Date(System.currentTimeMillis()).toString() + "\n"
+                +"(Note the angles are in degrees)\n"
+                + "A1, " + getA()[0] + "\n"
+                + "A2, " + getA()[1] + "\n"
+                + "B1, " + getB()[0] + "\n"
+                + "B2, " + getB()[1] + "\n"
+                + "entanglementEfficiency, " + getEntanglementEfficiency() + "\n"
+                + "seed, " + getSeed());
+    }
+
+    /**
+     * @return the entanglementEfficiency
+     */
+    public double getEntanglementEfficiency() {
+        return entanglementEfficiency;
+    }
+
+    /**
+     * @param entanglementEfficiency the entanglementEfficiency to set
+     */
+    public void setEntanglementEfficiency(double entanglementEfficiency) {
+        this.entanglementEfficiency = entanglementEfficiency;
+    }
+
+    /**
+     * @return the A
+     */
+    public double[] getA() {
+        return A;
+    }
+
+    /**
+     * @param A the A to set
+     */
+    public void setA(double[] A) {
+        this.A = A;
+    }
+
+    /**
+     * @return the B
+     */
+    public double[] getB() {
+        return B;
+    }
+
+    /**
+     * @param B the B to set
+     */
+    public void setB(double[] B) {
+        this.B = B;
+    }
+
+    /**
+     * @return the seed
+     */
+    public long getSeed() {
+        return seed;
+    }
+
+    /**
+     * @param seed the seed to set
+     */
+    public void setSeed(long seed) {
+        this.seed = seed;
+    }
+
+    /**
+     * @return the angleGenerator
+     */
+    public LAMBDAGENERATOR getAngleGenerator() {
+        return angleGenerator;
+    }
+
+    /**
+     * @param angleGenerator the angleGenerator to set
+     */
+    public void setAngleGenerator(LAMBDAGENERATOR angleGenerator) {
+        this.angleGenerator = angleGenerator;
     }
 }

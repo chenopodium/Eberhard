@@ -19,6 +19,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package simulation;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -28,15 +29,12 @@ import java.util.Random;
  *
  * @author croth
  */
-public class Rand {
+public class Rand implements Serializable{
+    private static final long serialversionUID =1L; 
 
     static Random rand = new Random();
 
-    static long seed = 1234;
-    static {
-        rand.setSeed(seed);
-    }
-
+    
     /* Random int from from (inclusive) to to (inclusive) */
     public static int randInt(int from, int to) {
         return rand.nextInt(to - from + 1) + from;
@@ -51,11 +49,8 @@ public class Rand {
         return rand.nextDouble() * (to - from) + from;
     }
 
-    public static long getSeed() {
-        return seed;
-    }
-    public static void setSeed(long s) {
-        seed = s;
+   
+    public static void setSeed(long s) {       
         rand.setSeed(s);
     }
 
