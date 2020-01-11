@@ -48,7 +48,7 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
     asymmetrical model. 
     If you prefer to use a symmetrical model, just call the same 
     method twice (such as compuetSpinB)
-    @param angleA is the angle at detector A in degrees
+    @param angleAtDetector is the angle at detector A in degrees
     @param lamda is the hidden variable (can be anything, usually an angle)
     @return
      +1 means plus
@@ -56,10 +56,10 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
      -1 means no detection
      */
     @Override
-    public int computeSpinA(double angleA, double lambda) {
-        if (lambda >= angleA && lambda <= angleA + 90) {
+    public int computeSpinA(double angleAtDetector, double lambda) {
+        if (lambda >= angleAtDetector && lambda <= angleAtDetector + 90) {
             return 1;
-        } else if (lambda >= angleA + 90 || lambda <= 180) {
+        } else if (lambda >= angleAtDetector + 90 || lambda <= 180) {
             return 0;
         } else {
             return -1;
@@ -72,7 +72,7 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
     asymmetrical model. 
     If you prefer to use a symmetrical model, just call the same 
     method twice (such as compuetSpinB)
-    @param angleB is the angle at detector A in degrees
+    @param angleAtDetector is the angle at detector A in degrees
     @param lamda is the hidden variable (can be anything, usually an angle)
     @return
      +1 means plus
@@ -80,10 +80,10 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
      -1 means no detection
      */
     @Override
-    public int computeSpinB(double angleB, double lambda) {
+    public int computeSpinB(double angleAtDetector, double lambda) {
 
-        double thetaPlus = thetaPlus(angleB);
-        double thetaMinus = thetaMinus(angleB);
+        double thetaPlus = thetaPlus(angleAtDetector);
+        double thetaMinus = thetaMinus(angleAtDetector);
 
         double lrad = Math.toRadians(lambda);
 
@@ -92,7 +92,7 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
         if (lambda >= thetaPlus && lambda <= thetaPlus + 90) {
             double thetarad = Math.toRadians(thetaPlus);
             double s = Math.abs(Math.sin(2 * (lrad - thetarad)));
-            double probB = PbPlus(angleB) * s;
+            double probB = PbPlus(angleAtDetector) * s;
             if (probB > 0) {
                 // if (Math.random() <= probB) {
                 spinB = 1;
@@ -104,7 +104,7 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
         if (lambda >= thetaMinus + 90 && lambda <= thetaMinus + 180) {
             double thetarad = Math.toRadians(thetaMinus);
             double s = Math.abs(Math.sin(2 * (lrad - thetarad)));
-            double probB = PbMinus(angleB) * s;
+            double probB = PbMinus(angleAtDetector) * s;
             if (probB > 0) {
                 //  if (Math.random() <= probB) {
                 spinB = 0;

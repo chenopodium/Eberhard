@@ -144,14 +144,14 @@ public class Engine implements Serializable {
     This can be done in a symmetrical way (use the same function for both detectors),
     or in an asymmetrical way (see comment in the code below)
     @param photonAngle hidden variable
-    @param whichA the angleA (0 or 1) for a1 or a2 (these angles are in degrees)
+    @param whichAngleB the angleA (0 or 1) for a1 or a2 (these angles are in degrees)
     @param whichB the angleB (0 or 1) for b1 or b2 (these angles are in degrees)
     @param write just a flag whether to write a log or not
      */
-    private void runOnePair(double photonAngleDegree, int whichA, int whichB) {
+    private void runOnePair(double photonAngleDegree, int whichAngleA, int whichAngleB) {
 
-        double A = settings.getA()[whichA];
-        double B = settings.getB()[whichB];
+        double angleA = settings.getA()[whichAngleA];
+        double angleB = settings.getB()[whichAngleB];
 
         /* Note: there is a asymmetrical model which breaks the inequality even more than the symmetrical one
         in this case, use model.computeSpinA and model.computeSpinB for each side.
@@ -161,19 +161,19 @@ public class Engine implements Serializable {
         computeSpinB both times (please take a look at the code), which is symmetrical.
         The inequality breaking is not that good in this case, but still good enough :-)
          */
-        int spinA = model.computeSpinB(A, photonAngleDegree);
-        int spinB = model.computeSpinB(B, photonAngleDegree);
+        int spinA = model.computeSpinB(angleA, photonAngleDegree);
+        int spinB = model.computeSpinB(angleB, photonAngleDegree);
 
         /* this is just for logging */
         int Adetected = spinA >= 0 ? 1: 0;
         int Bdetected = spinB >= 0 ? 1: 0;
 
         if (writeLog) {
-            log += whichA + ", " + whichB + ", " + A + ", " + B + ", " + spinA + ", " + spinB
+            log += whichAngleA + ", " + whichAngleB + ", " + angleA + ", " + angleB + ", " + spinA + ", " + spinB
                     + ", " + Adetected + ", " + Bdetected + ", " + f.format(photonAngleDegree) + "\n";
         }
         /* Add the counts */
-        counts.addResultOfOnePair(whichA, whichB, spinA, spinB);
+        counts.addResultOfOnePair(whichAngleA, whichAngleB, spinA, spinB);
 
         if (writeLog && log.length() > 10000) {
             writeFile(log, "log.csv", true);

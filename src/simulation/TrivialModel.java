@@ -65,12 +65,12 @@ J (prob),0.0445
      -1 means no detection
      */
     @Override
-    public int computeSpinA(double angleA, double lambda) {
-        return measure(angleA, lambda);
+    public int computeSpinA(double angleAtDetector, double lambda) {
+        return measure(angleAtDetector, lambda);
     }
 
-    private int measure(double angle, double lambda) {
-        double delta = lambda - angle;
+    private int measure(double angleAtDetector, double lambda) {
+        double delta = lambda - angleAtDetector;
         double a = Math.toRadians(delta);
         
         double pdetect = 2.3*Math.abs(Math.sin(a));
@@ -98,8 +98,8 @@ J (prob),0.0445
      -1 means no detection
      */
     @Override
-    public int computeSpinB(double angleB, double lambda) {
-       return measure(angleB, lambda);
+    public int computeSpinB(double angleAtDetector, double lambda) {
+       return measure(angleAtDetector, lambda);
     }
 
      private static void p(String s) {

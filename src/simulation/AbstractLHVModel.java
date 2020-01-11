@@ -29,14 +29,14 @@ public abstract class AbstractLHVModel implements Serializable{
     asymmetrical model. 
     If you prefer to use a symmetrical model, just call the same 
     method twice (compuetSpinB)
-    @param angleA is the angle at detector A
+    @param angleAtDetector is the angle at the detector 
     @param lamda is the hidden variable 
     @return
      +1 means plus
       0 means zero (extraordinary)
      -1 means no detection
      */
-    public abstract int computeSpinA(double angleA, double lambda);
+    public abstract int computeSpinA(double angleAtDetector, double lambda);
 
     /*
     Compute the spin at detector A. 
@@ -44,14 +44,14 @@ public abstract class AbstractLHVModel implements Serializable{
     asymmetrical model. 
     If you prefer to use a symmetrical model, just call the same 
     method twice (compuetSpinB)
-    @param angleB is the angle at detector A
+    @param angleAtDetector is the angle at detector A
     @param lamda is the hidden variable 
     @return
      +1 means plus
       0 means zero (extraordinary)
      -1 means no detection
      */
-    public abstract int computeSpinB(double angleB, double lambda);
+    public abstract int computeSpinB(double angleAtDetector, double lambda);
 
     public Settings getSettings() {
         return settings;
