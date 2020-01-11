@@ -30,9 +30,8 @@ public class Counts implements Serializable {
 
     private static final long serialversionUID = 1L;
 
-    private int singleA;
-    private int singleB;
-    private int[][] coincidences;
+    private int[] singleA;
+    private int[] singleB;
     private int[][] plus_plus;
     private int[][] plus_zero;
     private int[][] zero_plus;
@@ -41,22 +40,31 @@ public class Counts implements Serializable {
     private int bothDetected;
 
     public Counts() {
-        coincidences = new int[2][2];
         plus_plus = new int[2][2];
         plus_zero = new int[2][2];
         zero_plus = new int[2][2];
+        singleA = new int[2];
+        singleB = new int[2];
 
         totalTrials = 0;
     }
 
     /* @returns the number of trials where only A had a detection event */
-    public double getSingleA() {
-        return singleA;
+    public int getSingleA() {
+        return singleA[0] + singleA[1];
+    }
+
+    public int getSingleA(int whichA) {
+        return singleA[whichA];
     }
 
     /* @returns the number of trials where only B had a detection event */
-    public double getSingleB() {
-        return singleB;
+    public int getSingleB() {
+        return singleB[0] + singleB[1];
+    }
+
+    public int getSingleB(int whichB) {
+        return singleB[whichB];
     }
 
     /* @returns the number of total trials (includes non-detection evets) */
@@ -66,22 +74,17 @@ public class Counts implements Serializable {
 
     /* @returns the percent of trials where only A had a detection event */
     public double getPercentSingleA() {
-        return (double) singleA / (double) totalTrials * 100.0;
+        return (double) getSingleA() / (double) totalTrials * 100.0;
     }
 
     /* @returns the percent of trials where only A had a detection event */
     public double getPercentSingleB() {
-        return (double) singleB / (double) totalTrials * 100.0;
+        return (double) getSingleA() / (double) totalTrials * 100.0;
     }
 
     /* @returns the percent of trials where a detection was registered both at A and B */
     public double getPercentBothDetected() {
         return (double) bothDetected / (double) totalTrials * 100.0;
-    }
-
-    /* @returns the number of trials where the spin measured at A and B was the same (++ or 00) */
-    public int getCoincidenceCounts(int whichA, int whichB) {
-        return coincidences[whichA][whichB];
     }
 
     /* @returns the number of trials where the spin measured at A and B was ++ */
@@ -97,11 +100,6 @@ public class Counts implements Serializable {
     /* @returns the number of trials where the spin measured at A and B was 0+ */
     public int getZeroPlusCounts(int whichA, int whichB) {
         return zero_plus[whichA][whichB];
-    }
-
-    /* @returns the percent of trials where the spin measured at A and B was the same  */
-    public double getCoincidencePercent(int whichA, int whichB) {
-        return (double) coincidences[whichA][whichB] / (double) totalTrials * 100.0;
     }
 
     /* @returns the percent of trials where the spin measured at A and B was ++ */
@@ -123,16 +121,14 @@ public class Counts implements Serializable {
 
         if (!Adetected && !Bdetected) {
             // BOTH NOT DETECTED  - THEY ARE NOT RECORDED ANYWHERE          
-        } else if (!Adetected) {            // ONLY B DETECTED
-            singleB++;
+        } else if (!Adetected) {  // ONLY B DETECTED
+            singleB[whichB]++;
             zero_plus[whichA][whichB]++;
-        } else if (!Bdetected) {
-            // ONLY A DETECTED
-            singleA++;          
+        } else if (!Bdetected) {  // ONLY A DETECTED
+            singleA[whichA]++;
             plus_zero[whichA][whichB]++;
         } else if (Adetected && Bdetected) { // BOTH ARE DETECTED, 
             bothDetected++;
-            coincidences[whichA][whichB]++;
             plus_plus[whichA][whichB]++;
         }
     }

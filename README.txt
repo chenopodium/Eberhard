@@ -4,6 +4,7 @@ a LHV is still possible. If the experiment has better detection efficiency than 
 (please see https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf), then a LHV can no longer explain it.
 
 References:
+https://www.slideshare.net/gill1109/bell-lund2?next_slideshow=1
 https://pdfs.semanticscholar.org/8864/c5214a30a7acd8d186f53e8991cd8bc88f84.pdf
 https://journals.aps.org/prl/supplemental/10.1103/PhysRevLett.115.250401/Supplemental_material_final.pdf
 https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf

@@ -60,20 +60,41 @@ public class CH extends Inequality implements Serializable{
 
     /*
     @return computes the value of the inequality (such as J)
+    From Richard:
+    N12(a, b) – N12(a, b’) + N12(a’, b) +N12(a’, b’) -N1(a’) – N2(b) <= 0
+
+    a, a’, b and b’ are the settings;
+
+    N12 is the total number of double detections which are both “+” (the 12 stands for Lab 1 *and* Lab 2)
+    N1 is the number of detections which are “+” in Lab 1
+    N2 is the number of detections which are “+” in Lab 2
+
+    Notice that all four N12 are involved, one with a minus sign, the other three with a plus sign.
+    The one with a minus sign has settings a’, b
+    The two singles counts belong to the other settings a, b’ respectively
      */
     @Override
     public double compute() {
-
-        double n11 = getCounts().getCoincidenceCounts(0, 0);
-        double n12 = getCounts().getCoincidenceCounts(0, 1);
-        double n21 = getCounts().getCoincidenceCounts(1, 0);
-        double n22 = getCounts().getCoincidenceCounts(1, 1);
-        double j = n11
-                + n12
-                + n21
-                - n22
-                - getCounts().getSingleA()
-                - getCounts().getSingleB();
+        
+        // Plus means detected
+        // the first number is lab 1
+        // the second number is lab 2
+        // 1 is the first angle
+        // 2 is the second angle
+        int n11 = getCounts().getPlusPlusCounts(0, 0); // N12(a, b)
+        int n12 = getCounts().getPlusPlusCounts(0, 1); // N12(a, b’)
+        int n21 = getCounts().getPlusPlusCounts(1, 0); // N12(a’, b)
+        int n22 = getCounts().getPlusPlusCounts(1, 1); // N12(a’, b’) 
+        int sA = getCounts().getSingleA(1);            // N1(a’)
+        int sB = getCounts().getSingleB(0);            // N2(b)
+        // From Richard: N12(a, b) – N12(a, b’) + N12(a’, b) +N12(a’, b’) -N1(a’) – N2(b) <= 0
+        
+        int j = n11   //  N12(a, b)
+                - n12 //  N12(a, b’)
+                + n21 //  N12(a’, b)
+                + n22 //  N12(a’, b’) 
+                - sA  //  N1(a’) 
+                - sB; //  N2(b)
 
         return j;
     }
@@ -85,17 +106,17 @@ public class CH extends Inequality implements Serializable{
     @Override
     public String computeString() {
 
-        /* Using commas so that it can be imported into Excel */
-        double n11 = getCounts().getCoincidenceCounts(0, 0);
-        double n12 = getCounts().getCoincidenceCounts(0, 1);
-        double n21 = getCounts().getCoincidenceCounts(1, 0);
-        double n22 = getCounts().getCoincidenceCounts(1, 1);
-
-        
+        double n11 = getCounts().getPlusPlusCounts(0, 0); // N12(a, b)
+        double n12 = getCounts().getPlusPlusCounts(0, 1); // N12(a, b’)
+        double n21 = getCounts().getPlusPlusCounts(1, 0); // N12(a’, b)
+        double n22 = getCounts().getPlusPlusCounts(1, 1); // N12(a’, b’) 
+               
         String s = "\nName, CH inequality, see https://pdfs.semanticscholar.org/8864/c5214a30a7acd8d186f53e8991cd8bc88f84.pdf";
-        s +="\nFormula, J = N11 + N12 + N21 - N22 - singleA - singleB ";
+         // From Richard: N12(a, b) – N12(a, b’) + N12(a’, b) +N12(a’, b’) -N1(a’) – N2(b) <= 0
+        s +="\nFormula, J = N11 – N12 + N21 + N22  - singleA(1) – singleB(2) <= 0 ";
         s += "\nExplanation, if J >0 it agrees with QM and if J <= 0 it is a classical result";
-        s += "\nN11, " + n11 + "\nN12, " + n12 + "\nN21, " + n21 + "\nN22, " + n22 + "\nsingle A , " + getCounts().getSingleA() + "\nsingle B , " + getCounts().getSingleB();
+        s += "\nN11, " + n11 + "\nN12, " + n12 + "\nN21, " + n21 + "\nN22, " + n22 + 
+              "\nsingleA(2) , " + getCounts().getSingleA(1) + "\nsingleB(1) , " + getCounts().getSingleB();
 
         double j = compute();
 
