@@ -24,23 +24,28 @@ import java.io.Serializable;
 /**
  *
  * @author croth
- * @see https://journals.aps.org/prl/supplemental/10.1103/PhysRevLett.115.250401/Supplemental_material_final.pdf
- * @see https://physics.aps.org/featured-article-pdf/10.1103/PhysRevLett.115.250401
+ * @see
+ * https://journals.aps.org/prl/supplemental/10.1103/PhysRevLett.115.250401/Supplemental_material_final.pdf
+ * @see
+ * https://physics.aps.org/featured-article-pdf/10.1103/PhysRevLett.115.250401
  */
-public class Guistina2015 extends Inequality implements Serializable{
-    private static final long serialversionUID =1L; 
-     /* The angles  in degrees to use in degrees for detector A and B */
-    //private double[] A = {0, 2};
-    // private double[] B = {1, -45};
-    
-   
-    private double[] A = {0, 1};
-    private double[] B = {2, -39};
+public class Guistina2015 extends Inequality implements Serializable {
+
+    private static final long serialversionUID = 1L;
+    /* The angles  in degrees to use in degrees for detector A and B */
+
+    // A1, 0.0 A2, 76.0 B1, 38.0 B2, 0.0, j=102.
+    // A1, 0.0 A2, 4.0 B1, 3.0 B2, 31.0, j=198.0
+    //  A1, 0.0 A2, 30.0 B1, 10.0 B2, 0.0
+    //  A1, 0.0 A2, 51.0 B1, 2.0 B2, 19.0, j=237.0,
+    private double[] A = {0, 51};
+    private double[] B = {2, 19};
 
     /*
      @return the preferred angles at detector A in degrees (such as 0, 45)
      */
     @Override
+
     public double[] getPreferredA() {
         return A;
     }
@@ -61,16 +66,22 @@ public class Guistina2015 extends Inequality implements Serializable{
         super(counts);
     }
 
-     
     /*
     @return computes the value of the inequality (such as J)
-    */
+     */
     @Override
     public double compute() {
 
+        /* Plus Plus is A detected and B detected */
         double n11 = getCounts().getPlusPlusCounts(0, 0);
+        
+         /* Plus Zero is A deteced and B not detected */
         double n12 = getCounts().getPlusZeroCounts(0, 1);
+        
+         /* Zero Plus is A not deteced and B detected */
         double n21 = getCounts().getZeroPlusCounts(1, 0);
+        
+         /* Plus Plus is A detected and B detected */
         double n22 = getCounts().getPlusPlusCounts(1, 1);
 
         double j = n11
@@ -81,10 +92,10 @@ public class Guistina2015 extends Inequality implements Serializable{
         return j;
     }
 
-     /*
+    /*
     @return compute a string representation of the inequality used for output (ideally with
     the individual counts, such as N11 etc, the equation, and the result 
-    */
+     */
     @Override
     public String computeString() {
 
@@ -95,7 +106,7 @@ public class Guistina2015 extends Inequality implements Serializable{
 
         /* Using commas so that it can be imported into Excel */
         String s = "\nName, Inequality used in the Guistina 2015 experiment, see https://journals.aps.org/prl/supplemental/10.1103/PhysRevLett.115.250401/Supplemental_material_final.pdf";
-        s +="\nFormula, J = N11(++) - N12(+0) - N21(0+) - N22(++)";
+        s += "\nFormula, J = N11(++) - N12(+0) - N21(0+) - N22(++)";
         s += "\nExplanation, if J > 0 is agrees with QM and if J <=0 it is a classical result\n";
 
         s += "\nN11 ++, " + n11;
@@ -112,7 +123,7 @@ public class Guistina2015 extends Inequality implements Serializable{
         double pj = j / tot;
 
         s += "\nJ/total," + pj;
-      
+
         return s;
     }
 

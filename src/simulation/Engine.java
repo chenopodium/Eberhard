@@ -161,7 +161,7 @@ public class Engine implements Serializable {
         computeSpinB both times (please take a look at the code), which is symmetrical.
         The inequality breaking is not that good in this case, but still good enough :-)
          */
-        int spinA = model.computeSpinB(angleA, photonAngleDegree);
+        int spinA = model.computeSpinA(angleA, photonAngleDegree);
         int spinB = model.computeSpinB(angleB, photonAngleDegree);
 
         /* this is just for logging */
@@ -214,7 +214,7 @@ public class Engine implements Serializable {
                         }
                         // resset the counts
                         counts = null;
-                        double j = run(2000, null, false);
+                        double j = run(10000, null, false);
                         count++;
                         if (count % 10000 == 0 || j > maxj * 0.8) {
                             String greenBold = "\033[34;1m";

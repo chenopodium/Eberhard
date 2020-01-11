@@ -26,8 +26,9 @@ import java.io.Serializable;
  *
  * @author croth
  */
-public class Counts implements Serializable{
-    private static final long serialversionUID =1L; 
+public class Counts implements Serializable {
+
+    private static final long serialversionUID = 1L;
 
     private int singleA;
     private int singleB;
@@ -35,6 +36,7 @@ public class Counts implements Serializable{
     private int[][] plus_plus;
     private int[][] plus_zero;
     private int[][] zero_plus;
+
     private int totalTrials;
     private int bothDetected;
 
@@ -43,6 +45,7 @@ public class Counts implements Serializable{
         plus_plus = new int[2][2];
         plus_zero = new int[2][2];
         zero_plus = new int[2][2];
+
         totalTrials = 0;
     }
 
@@ -81,15 +84,17 @@ public class Counts implements Serializable{
         return coincidences[whichA][whichB];
     }
 
-     /* @returns the number of trials where the spin measured at A and B was ++ */
+    /* @returns the number of trials where the spin measured at A and B was ++ */
     public int getPlusPlusCounts(int whichA, int whichB) {
         return plus_plus[whichA][whichB];
     }
-/* @returns the number of trials where the spin measured at A and B was +0 */
+
+    /* @returns the number of trials where the spin measured at A and B was +0 */
     public int getPlusZeroCounts(int whichA, int whichB) {
         return plus_zero[whichA][whichB];
     }
-/* @returns the number of trials where the spin measured at A and B was 0+ */
+
+    /* @returns the number of trials where the spin measured at A and B was 0+ */
     public int getZeroPlusCounts(int whichA, int whichB) {
         return zero_plus[whichA][whichB];
     }
@@ -113,27 +118,22 @@ public class Counts implements Serializable{
 
         totalTrials++;
 
-        if (spinA < 0 && spinB < 0) {
+        boolean Adetected = spinA >= 0;
+        boolean Bdetected = spinB >= 0;
+
+        if (!Adetected && !Bdetected) {
             // BOTH NOT DETECTED  - THEY ARE NOT RECORDED ANYWHERE          
-        } else if (spinA < 0) {
-            // ONLY B DETECTED
+        } else if (!Adetected) {            // ONLY B DETECTED
             singleB++;
-        } else if (spinB < 0) {
+            zero_plus[whichA][whichB]++;
+        } else if (!Bdetected) {
             // ONLY A DETECTED
-            singleA++;
-        } else {  // BOTH ARE NON NEGATIVE; SO BOTH WERE DETECTED
+            singleA++;          
+            plus_zero[whichA][whichB]++;
+        } else if (Adetected && Bdetected) { // BOTH ARE DETECTED, 
             bothDetected++;
-            if (spinA == spinB) {
-                // BOTH ARE THE SAME
-                coincidences[whichA][whichB]++;
-            }
-            if (spinA == 1 && spinB == 1) { // BOTH ARE +
-                plus_plus[whichA][whichB]++;
-            } else if (spinA == 1 && spinB == 0) { // PLUS AND 0
-                plus_zero[whichA][whichB]++;
-            } else if (spinA == 0 && spinB == 1) { // 0 AND PLUS
-                zero_plus[whichA][whichB]++;
-            }
+            coincidences[whichA][whichB]++;
+            plus_plus[whichA][whichB]++;
         }
     }
 

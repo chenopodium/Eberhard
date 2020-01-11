@@ -52,7 +52,7 @@ public class Simulation {
         p("Please see the README.TXT for instructions");
         int[][] values = null;
         long seed = 1234;
-        String ineq = "G";
+        String ineq = "C";
         String model = "W";
         String mode = "RESTART";
         String statefile = "saved.ser";
@@ -113,15 +113,16 @@ public class Simulation {
         Settings settings = new Settings();
         settings.setSeed(seed);
         settings.setTrials(trials);
-       
-        boolean continueExperiment =false;
+
+        boolean continueExperiment = false;
         if (mode.equalsIgnoreCase("CONTINUE")) {
             p("Attempting to continue last run using file " + statefile);
             engine = loadModel(statefile);
             if (engine == null) {
                 p("I was not able to read the file " + statefile);
+            } else {
+                continueExperiment = true;
             }
-            else continueExperiment = true;
         } else {
             Inequality in;
             AbstractLHVModel lhv;
@@ -140,11 +141,10 @@ public class Simulation {
             }
 
             engine = new Engine(lhv, in);
-            
+ //  engine.findAngles(in);
         }
-        
-        engine.run(trials, values, continueExperiment);
 
+         engine.run(trials, values, continueExperiment);
         // save model to a file with all settings, in case we want to continue
         saveModel(engine, statefile);
         System.exit(0);
