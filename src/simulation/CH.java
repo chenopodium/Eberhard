@@ -23,7 +23,7 @@ import java.io.Serializable;
 
 /**
  * @see https://en.wikipedia.org/wiki/CHSH_inequality (there is a section on CH)
- * @see https://pdfs.semanticscholar.org/8864/c5214a30a7acd8d186f53e8991cd8bc88f84.pdf
+ * @see https://www.slideshare.net/gill1109/yet-another-statistical-analysis-of-the-data-of-the-loophole-free-experiments-of-2015-revised
  * The CH inequality of the form N11 + N12 + N21 - N22 - singleA - singleB 
  * The value is <= 0 for classical experiments and >0 for QM
  * @author croth
@@ -111,7 +111,7 @@ public class CH extends Inequality implements Serializable{
         double n21 = getCounts().getPlusPlusCounts(1, 0); // N12(a’, b)
         double n22 = getCounts().getPlusPlusCounts(1, 1); // N12(a’, b’) 
                
-        String s = "\nName, CH inequality, see https://pdfs.semanticscholar.org/8864/c5214a30a7acd8d186f53e8991cd8bc88f84.pdf";
+        String s = "\nName, CH inequality, see https://www.slideshare.net/gill1109/yet-another-statistical-analysis-of-the-data-of-the-loophole-free-experiments-of-2015-revised";
          // From Richard: N12(a, b) – N12(a, b’) + N12(a’, b) +N12(a’, b’) -N1(a’) – N2(b) <= 0
         s +="\nFormula, J = N11 – N12 + N21 + N22  - singleA(1) – singleB(2) <= 0 ";
         s += "\nExplanation, if J >0 it agrees with QM and if J <= 0 it is a classical result";
