@@ -38,6 +38,7 @@ public class Settings implements Serializable{
     private double[] A = {0, 45};
     private double[] B = {-180 / 16.0, 180 / 16.0};
     private long seed = 1234;
+    private long trials = 100000;
 
     private LAMBDAGENERATOR angleGenerator = LAMBDAGENERATOR.RANDOMANGLES;
 
@@ -46,7 +47,7 @@ public class Settings implements Serializable{
     }
 
     public String toShortString() {
-        return  "A1, " + getA()[0] 
+        return  "A1, " + getA()[0]
                 + " A2, " + getA()[1] 
                 + " B1, " + getB()[0] 
                 + " B2, " + getB()[1];
@@ -54,13 +55,12 @@ public class Settings implements Serializable{
     @Override
     public String toString() {
         return "Date, " + (new Date(System.currentTimeMillis()).toString() + "\n"
-                +"(Note the angles are in degrees)\n"
-                + "A1, " + getA()[0] + "\n"
-                + "A2, " + getA()[1] + "\n"
-                + "B1, " + getB()[0] + "\n"
-                + "B2, " + getB()[1] + "\n"
+                + "A1, " + getA()[0] + ", angle at detector A in degrees \n"
+                + "A2, " + getA()[1] + ", angle at detector A in degrees\n"
+                + "B1, " + getB()[0] + ", angle at detector B in degrees\n"
+                + "B2, " + getB()[1] + ", angle at detector B in degrees\n"
                 + "entanglementEfficiency, " + getEntanglementEfficiency() + "\n"
-                + "seed, " + getSeed());
+                + "Seed, " + getSeed()+", the seed used in the random generator");
     }
 
     /**
@@ -131,5 +131,19 @@ public class Settings implements Serializable{
      */
     public void setAngleGenerator(LAMBDAGENERATOR angleGenerator) {
         this.angleGenerator = angleGenerator;
+    }
+
+    /**
+     * @return the trials
+     */
+    public long getTrials() {
+        return trials;
+    }
+
+    /**
+     * @param trials the trials to set
+     */
+    public void setTrials(long trials) {
+        this.trials = trials;
     }
 }

@@ -47,7 +47,7 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
     There are two methods for A and B so that we can use an 
     asymmetrical model. 
     If you prefer to use a symmetrical model, just call the same 
-    method twice (compuetSpinB)
+    method twice (such as compuetSpinB)
     @param angleA is the angle at detector A in degrees
     @param lamda is the hidden variable (can be anything, usually an angle)
     @return
@@ -71,7 +71,7 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
     There are two methods for A and B so that we can use an 
     asymmetrical model. 
     If you prefer to use a symmetrical model, just call the same 
-    method twice (compuetSpinB)
+    method twice (such as compuetSpinB)
     @param angleB is the angle at detector A in degrees
     @param lamda is the hidden variable (can be anything, usually an angle)
     @return

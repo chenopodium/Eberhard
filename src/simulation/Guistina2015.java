@@ -94,8 +94,9 @@ public class Guistina2015 extends Inequality implements Serializable{
         double n22 = getCounts().getPlusPlusCounts(1, 1);
 
         /* Using commas so that it can be imported into Excel */
-        String s = "\nJ, N11(++) - N12(+0) - N21(0+) - N22(++)";
-        s += "\n(J > 0 is QM, J <=0 is classical)";
+        String s = "\nName, Inequality used in the Guistina 2015 experiment, see https://journals.aps.org/prl/supplemental/10.1103/PhysRevLett.115.250401/Supplemental_material_final.pdf";
+        s +="\nFormula, J = N11(++) - N12(+0) - N21(0+) - N22(++)";
+        s += "\nExplanation, if J > 0 is agrees with QM and if J <=0 it is a classical result\n";
 
         s += "\nN11 ++, " + n11;
         s += "\nN12 +0, " + n12;

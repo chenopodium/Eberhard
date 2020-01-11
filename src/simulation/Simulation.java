@@ -50,29 +50,12 @@ public class Simulation {
     /* Main method and entry point for the program */
     public static void main(String[] args) {
         p("Please see the README.TXT for instructions");
-        /*
-        p("Arguments:");
-        p("-file filename: the file with random settings for A and B (see details below)");
-        p("-seed seed: the random seed (a number like 12346). The default is 1234");
-        p("-trials nr trials: the number of pairs that are generated (default is 100000) (This is plenty... larger values just make it slower)");
-        p("-inequality: CH or Guistina.");
-        p("             CH uses N11 + N12 + N21 - N22 - singleA - singleB (<0 is classical)");
-        p("             Guistina uses N11(++) - N12(+0) - N21(0+) - N22(++) (<0 is classical)");
-        p("-model: Wang or Trivial");
-        p("             Trivial: trivial model using something similar to sin(delta) for measurement, just as a comparison to the other model");
-        p("             Wang (default): F. Wang's model from the paper above");
-        p("\nExamples:");
-        p("java -jar simulation.jar  (all default values)");
-        p("java -jar simulation.jar -file c:\\settings.csv -seed 12345  -inequality CH");
-        p("\nThe results are written to a file summary.csv and also to a more detailed log.csv file with the input angles and counts for each run");
-        p("---------------------------------- EXPERIMENET ---------------------------------\n");
-        */
         int[][] values = null;
         long seed = 1234;
         String ineq = "G";
         String model = "W";
-        String mode ="RESTART";
-        String statefile="saved.ser";
+        String mode = "RESTART";
+        String statefile = "saved.ser";
         int trials = 100000;
 
         if (args != null && args.length > 1) {
@@ -112,30 +95,34 @@ public class Simulation {
                     } else if (value.startsWith("W")) {
                         ineq = "WANG";
                     }
-                }else if (key.startsWith("MODE")) {
+                } else if (key.startsWith("MODE")) {
                     value = value.toUpperCase();
                     if (value.startsWith("C")) {
                         mode = "CONTINUE";
-                    } else mode = "RESTART";
-                    
+                    } else {
+                        mode = "RESTART";
+                    }
+
                 }
 
             }
 
         }
-        
+
         Engine engine = null;
+        Settings settings = new Settings();
+        settings.setSeed(seed);
+        settings.setTrials(trials);
+       
+        boolean continueExperiment =false;
         if (mode.equalsIgnoreCase("CONTINUE")) {
-            p("Attempting to continue last run using file "+statefile);
-             engine=loadModel(statefile);
-             if (engine == null) {
-                 p("I was not able to read the file "+statefile);
-             }
-        }
-        else {
-            Settings settings = new Settings();
-            settings.setSeed(seed);
-            Rand.setSeed(seed);
+            p("Attempting to continue last run using file " + statefile);
+            engine = loadModel(statefile);
+            if (engine == null) {
+                p("I was not able to read the file " + statefile);
+            }
+            else continueExperiment = true;
+        } else {
             Inequality in;
             AbstractLHVModel lhv;
             if (ineq.startsWith("C")) {
@@ -153,9 +140,11 @@ public class Simulation {
             }
 
             engine = new Engine(lhv, in);
+            
         }
-        engine.run(trials, values, true );
-       
+        
+        engine.run(trials, values, continueExperiment);
+
         // save model to a file with all settings, in case we want to continue
         saveModel(engine, statefile);
         System.exit(0);
@@ -230,33 +219,32 @@ public class Simulation {
     }
 
     private static Engine loadModel(String filename) {
-         try { 
-            FileInputStream file = new FileInputStream  (filename); 
-            ObjectInputStream in = new ObjectInputStream  (file); 
-  
-            Engine engine= (Engine)in.readObject(); 
-  
-            in.close(); 
-            file.close(); 
+        try {
+            FileInputStream file = new FileInputStream(filename);
+            ObjectInputStream in = new ObjectInputStream(file);
+
+            Engine engine = (Engine) in.readObject();
+
+            in.close();
+            file.close();
             return engine;
-        }   
-        catch (Exception ex) { 
-            p("I could not read the saved state from file "+filename+" because: "+ex.getMessage());
+        } catch (Exception ex) {
+            p("I could not read the saved state from file " + filename + " because: " + ex.getMessage());
             ex.printStackTrace();
-        } 
-         return null;
+        }
+        return null;
     }
+
     private static void saveModel(Engine engine, String filename) {
-         try {   
+        try {
             // Saving the current counts, seed and settings to a file 
-            FileOutputStream file = new FileOutputStream(filename); 
-            ObjectOutputStream out = new ObjectOutputStream (file); 
-            out.writeObject(engine);   
-            out.close(); 
-            file.close();   
-        }   
-        catch (IOException ex) { 
-            p("I could not save the current state to file "+filename+" because: "+ex.getMessage());
-        } 
+            FileOutputStream file = new FileOutputStream(filename);
+            ObjectOutputStream out = new ObjectOutputStream(file);
+            out.writeObject(engine);
+            out.close();
+            file.close();
+        } catch (IOException ex) {
+            p("I could not save the current state to file " + filename + " because: " + ex.getMessage());
+        }
     }
 }

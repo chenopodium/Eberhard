@@ -29,29 +29,42 @@ import java.util.Random;
  *
  * @author croth
  */
-public class Rand implements Serializable{
-    private static final long serialversionUID =1L; 
+public class Rand implements Serializable {
 
-    static Random rand = new Random();
+    private static final long serialversionUID = 1L;
 
-    
-    /* Random int from from (inclusive) to to (inclusive) */
-    public static int randInt(int from, int to) {
-        return rand.nextInt(to - from + 1) + from;
+    private Random generator;
+
+    private static Rand rand;
+
+    public static Rand getRand() {
+        if (rand == null) {
+            rand = new Rand();
+        }
+        return rand;
     }
 
-    public static double randDouble() {
-        return rand.nextDouble();
+    public Rand() {
+        generator = new Random();
+    }
+
+    /* Random int from from (inclusive) to to (inclusive) */
+    public int randInt(int from, int to) {
+
+        return generator.nextInt(to - from + 1) + from;
+    }
+
+    public double randDouble() {
+        return generator.nextDouble();
     }
 
     /* Random int from from (inclusive) to to (exclusive) */
-    public static double randDouble(double from, double to) {
-        return rand.nextDouble() * (to - from) + from;
+    public double randDouble(double from, double to) {
+        return generator.nextDouble() * (to - from) + from;
     }
 
-   
-    public static void setSeed(long s) {       
-        rand.setSeed(s);
+    public void setSeed(long s) {
+        generator.setSeed(s);
     }
 
 }

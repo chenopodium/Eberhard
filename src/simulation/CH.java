@@ -91,8 +91,10 @@ public class CH extends Inequality implements Serializable{
         double n21 = getCounts().getCoincidenceCounts(1, 0);
         double n22 = getCounts().getCoincidenceCounts(1, 1);
 
-        String s = "\nJ, N11 + N12 + N21 - N22 - singleA - singleB ";
-        s += "\n(J >0 is QM, J <= 0 is classical)";
+        
+        String s = "\nName, CH inequality, see https://pdfs.semanticscholar.org/8864/c5214a30a7acd8d186f53e8991cd8bc88f84.pdf";
+        s +="\nFormula, J = N11 + N12 + N21 - N22 - singleA - singleB ";
+        s += "\nExplanation, if J >0 it agrees with QM and if J <= 0 it is a classical result";
         s += "\nN11, " + n11 + "\nN12, " + n12 + "\nN21, " + n21 + "\nN22, " + n22 + "\nsingle A , " + getCounts().getSingleA() + "\nsingle B , " + getCounts().getSingleB();
 
         double j = compute();

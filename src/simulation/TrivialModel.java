@@ -29,6 +29,8 @@ import java.io.Serializable;
  */
 public class TrivialModel extends AbstractLHVModel implements Serializable{
     private static final long serialversionUID =1L; 
+    
+    private Rand rand;
     /*
     A dummy model, but it can still break it :-)
     
@@ -44,6 +46,7 @@ J (prob),0.0445
      */
     public TrivialModel(Settings settings) {
         super(settings);
+        rand = Rand.getRand();
 
     }
 
@@ -72,7 +75,7 @@ J (prob),0.0445
         
         double pdetect = 2.3*Math.abs(Math.sin(a));
    
-        if (Rand.randDouble()<=pdetect) {
+        if (rand.randDouble()<=pdetect) {
             int spin = -(int) Math.signum(Math.sin(a)); 
             if (spin <0) spin =1;
         
