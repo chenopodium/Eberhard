@@ -52,7 +52,7 @@ public class Engine implements Serializable {
 
     /* Just for writing a "log" file with the results */
     String log;
-    
+
     /* Whether to write the results into a file or not */
     boolean writeLog;
 
@@ -88,6 +88,8 @@ public class Engine implements Serializable {
 
         if (counts == null || !continueExperiment) {
             counts = new Counts();
+            String header = "Setting A, Setting B, Angle A, Angle B, Spin A, Spin B, A Detected, B Detected,  Hidden variable\n";
+            writeFile(header, "log.csv", false);
         }
         log = "";
 
@@ -163,11 +165,12 @@ public class Engine implements Serializable {
         int spinB = model.computeSpinB(B, photonAngleDegree);
 
         /* this is just for logging */
-        boolean detected = (spinA >= 0 && spinB >= 0);
-        boolean coinc = (spinA == spinB && spinB >= 0);
+        int Adetected = spinA >= 0 ? 1: 0;
+        int Bdetected = spinB >= 0 ? 1: 0;
+
         if (writeLog) {
             log += whichA + ", " + whichB + ", " + A + ", " + B + ", " + spinA + ", " + spinB
-                    + ", " + (detected ? 1 : 0) + ", " + (coinc ? 1 : 0) + ", " + f.format(photonAngleDegree) + "\n";
+                    + ", " + Adetected + ", " + Bdetected + ", " + f.format(photonAngleDegree) + "\n";
         }
         /* Add the counts */
         counts.addResultOfOnePair(whichA, whichB, spinA, spinB);
@@ -249,29 +252,22 @@ public class Engine implements Serializable {
     }
 
     private void writeResults(boolean continueExperiment) {
-        
-        if (!continueExperiment) {
-            String header = "Setting A, Setting B, Angle A, Angle B, Spin A, Spin B, Both Detected, Coincidence, Hidden variable\n";
-            writeFile(header, "log.csv", false);
-
-        }
-
         writeFile(log, "log.csv", true);
 
         String summary = getSummary();
         writeFile(summary, "summary.csv", false);
         p(summary);
     }
-    
+
     private String getSummary() {
-         String summary = settings.toString();
-        summary += "\nTrials, " + counts.getTotalTrials()+", the number of pairs that we have produced in total";
-        summary += "\nModel, " + model.getClass().getName()+", the name of the class that computes the measurement for a photon, an angle at a detector and a hidden variable";
-        summary += "\nInequality, " + inequality.getClass().getName()+", the name of the class that contains the inequality formula";
+        String summary = settings.toString();
+        summary += "\nTrials, " + counts.getTotalTrials() + ", the number of pairs that we have produced in total";
+        summary += "\nModel, " + model.getClass().getName() + ", the name of the class that computes the measurement for a photon, an angle at a detector and a hidden variable";
+        summary += "\nInequality, " + inequality.getClass().getName() + ", the name of the class that contains the inequality formula";
         summary += "\n" + inequality.computeString();
         summary += "\n% detected, " + f.format(counts.getPercentBothDetected()) + "%";
         summary += "\nTotal count , " + counts.getTotalTrials() + "";
-       return summary;
+        return summary;
     }
 
     /* pure lazyness :-) */
