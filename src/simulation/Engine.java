@@ -214,7 +214,7 @@ public class Engine implements Serializable {
                         }
                         // resset the counts
                         counts = null;
-                        double j = run(10000, null, false);
+                        double j = run(1000, null, false);
                         count++;
                         if (count % 10000 == 0 || j > maxj * 0.8) {
                             String greenBold = "\033[34;1m";
@@ -223,7 +223,7 @@ public class Engine implements Serializable {
                                 greenBold = "";
                                 reset = "";
                             } else if (j > maxj * 0.8) {
-                                in.setCounts(counts);//new Guistina2015(counts);
+                                in.setCounts(counts);
                                 in.computeString();
 
                             }

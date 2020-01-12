@@ -33,6 +33,7 @@ public class Counts implements Serializable {
     private int[] singleA;
     private int[] singleB;
     private int[][] plus_plus;
+    private int[][] coincidence;
     private int[][] plus_zero;
     private int[][] zero_plus;
 
@@ -41,6 +42,7 @@ public class Counts implements Serializable {
 
     public Counts() {
         plus_plus = new int[2][2];
+        coincidence = new int[2][2];
         plus_zero = new int[2][2];
         zero_plus = new int[2][2];
         singleA = new int[2];
@@ -92,6 +94,11 @@ public class Counts implements Serializable {
         return plus_plus[whichA][whichB];
     }
 
+    /* @returns the number of trials where the spin measured at A and B was ++ */
+    public int getCoincidenceCounts(int whichA, int whichB) {
+        return coincidence[whichA][whichB];
+    }
+
     /* @returns the number of trials where the spin measured at A and B was +0 */
     public int getPlusZeroCounts(int whichA, int whichB) {
         return plus_zero[whichA][whichB];
@@ -119,17 +126,25 @@ public class Counts implements Serializable {
         boolean Adetected = spinA >= 0;
         boolean Bdetected = spinB >= 0;
 
+        if (spinA == 1) {
+            singleA[whichA]++;
+        }
+        if (spinB == 1) {
+            singleB[whichB]++;
+        }
         if (!Adetected && !Bdetected) {
             // BOTH NOT DETECTED  - THEY ARE NOT RECORDED ANYWHERE          
         } else if (!Adetected) {  // ONLY B DETECTED
-            singleB[whichB]++;
             zero_plus[whichA][whichB]++;
         } else if (!Bdetected) {  // ONLY A DETECTED
-            singleA[whichA]++;
             plus_zero[whichA][whichB]++;
         } else if (Adetected && Bdetected) { // BOTH ARE DETECTED, 
             bothDetected++;
+
             plus_plus[whichA][whichB]++;
+            if (spinA == spinB) {
+                coincidence[whichA][whichB]++;
+            }
         }
     }
 

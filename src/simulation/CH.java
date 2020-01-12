@@ -32,9 +32,14 @@ public class CH extends Inequality implements Serializable{
     private static final long serialversionUID =1L; 
 
     /* The angles in degrees to use in degrees for detector A and B */
+    /*
     private double[] A = {0, 45};  
     private double[] B = {-180 / 16.0, 180 / 16.0};
-
+*/
+    private double[] A = {0, 8};  
+    private double[] B = {1,-8};
+    
+    // A1, 0.0 A2, 8.0 B1, 1.0 B2, -8.0, j=374.0
     public CH() {
     }
 
@@ -81,10 +86,10 @@ public class CH extends Inequality implements Serializable{
         // the second number is lab 2
         // 1 is the first angle
         // 2 is the second angle
-        int n11 = getCounts().getPlusPlusCounts(0, 0); // N12(a, b)
-        int n12 = getCounts().getPlusPlusCounts(0, 1); // N12(a, b’)
-        int n21 = getCounts().getPlusPlusCounts(1, 0); // N12(a’, b)
-        int n22 = getCounts().getPlusPlusCounts(1, 1); // N12(a’, b’) 
+        int n11 = getCounts().getCoincidenceCounts(0, 0); // N12(a, b)
+        int n12 = getCounts().getCoincidenceCounts(0, 1); // N12(a, b’)
+        int n21 = getCounts().getCoincidenceCounts(1, 0); // N12(a’, b)
+        int n22 = getCounts().getCoincidenceCounts(1, 1); // N12(a’, b’) 
         int sA = getCounts().getSingleA(1);            // N1(a’)
         int sB = getCounts().getSingleB(0);            // N2(b)
         // From Richard: N12(a, b) – N12(a, b’) + N12(a’, b) +N12(a’, b’) -N1(a’) – N2(b) <= 0
@@ -106,27 +111,29 @@ public class CH extends Inequality implements Serializable{
     @Override
     public String computeString() {
 
-        double n11 = getCounts().getPlusPlusCounts(0, 0); // N12(a, b)
-        double n12 = getCounts().getPlusPlusCounts(0, 1); // N12(a, b’)
-        double n21 = getCounts().getPlusPlusCounts(1, 0); // N12(a’, b)
-        double n22 = getCounts().getPlusPlusCounts(1, 1); // N12(a’, b’) 
+        int n11 = getCounts().getCoincidenceCounts(0, 0); // N12(a, b)
+        int n12 = getCounts().getCoincidenceCounts(0, 1); // N12(a, b’)
+        int n21 = getCounts().getCoincidenceCounts(1, 0); // N12(a’, b)
+        int n22 = getCounts().getCoincidenceCounts(1, 1); // N12(a’, b’) 
+        int sA = getCounts().getSingleA(1);            // N1(a’)
+        int sB = getCounts().getSingleB(0);            // N2(b)
                
         String s = "\nName, CH inequality, see https://www.slideshare.net/gill1109/yet-another-statistical-analysis-of-the-data-of-the-loophole-free-experiments-of-2015-revised";
          // From Richard: N12(a, b) – N12(a, b’) + N12(a’, b) +N12(a’, b’) -N1(a’) – N2(b) <= 0
-        s +="\nFormula, J = N11 – N12 + N21 + N22  - singleA(1) – singleB(2) <= 0 ";
+        s +="\nFormula, CH = N11 – N12 + N21 + N22  - singleA(1) – singleB(2) <= 0 ";
         s += "\nExplanation, if J >0 it agrees with QM and if J <= 0 it is a classical result";
         s += "\nN11, " + n11 + "\nN12, " + n12 + "\nN21, " + n21 + "\nN22, " + n22 + 
-              "\nsingleA(2) , " + getCounts().getSingleA(1) + "\nsingleB(1) , " + getCounts().getSingleB();
+              "\nsingleA(2) , " + sA + "\nsingleB(1) , " + sB;
 
-        double j = compute();
+        double CH = compute();
 
-        s += "\nJ," + j;
+        s += "\nCH," + CH;
 
-        double tot = getCounts().getTotalTrials();
+        int tot = getCounts().getTotalTrials();
 
-        double pj = j / tot;
+        double pCH = CH / (double)tot;
 
-        s += "\nJ/total," + pj;
+        s += "\nCH/total," + pCH;
        
         return s;
     }

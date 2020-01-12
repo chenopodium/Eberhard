@@ -141,7 +141,7 @@ public class Simulation {
             }
 
             engine = new Engine(lhv, in);
- //  engine.findAngles(in);
+   engine.findAngles(in);
         }
 
          engine.run(trials, values, continueExperiment);
