@@ -43,27 +43,3 @@ The file with settings should be a simple text file with one line for each pair,
 The first number is which angle to use for A (0=a1 or 1=a2), the second is which angle to use for B (0=b1 or 1=b2)
 
 The results are written to a file summary.csv and also to a more detailed log.csv file with the input angles and counts for each run
-
-Example summary:
-Date, Wed Jan 08 13:40:39 CET 2020
-
-A1, 0.0
-A2, 1.0
-B1, 2.0
-B2, -39.0
-entanglementEfficiency, 0.7
-seed, 1234
-Trials, 100000
-Model, simulation.WangLHVModel
-Inequality, simulation.Guistina2015
-
-J, N11(++) - N12(+0) - N21(0+) - N22(++)
-(J > 0 is QM, J <=0 is classical)
-N11 ++, 12084.0
-N12 +0, 0.0
-N21 0+, 188.0
-N22 ++, 5824.0
-J,6072.0
-J (prob),0.06072
-% detected, 85.5%
-Total count , 100000
