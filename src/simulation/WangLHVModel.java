@@ -32,8 +32,10 @@ import java.io.Serializable;
  * @see https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf
  * @author croth
  */
-public class WangLHVModel extends AbstractLHVModel implements Serializable{
-    private static final long serialversionUID =1L; 
+public class WangLHVModel extends AbstractLHVModel implements Serializable {
+
+    private static final long serialversionUID = 1L;
+
     /*
     @see https://arxiv.org/ftp/arxiv/papers/1411/1411.6053.pdf
      */
@@ -94,9 +96,9 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
             double s = Math.abs(Math.sin(2 * (lrad - thetarad)));
             double probB = PbPlus(angleAtDetector) * s;
             if (probB > 0) {
-                // if (Math.random() <= probB) {
-                spinB = 1;
-                // }
+                //if (Rand.getRand().randDouble() <= probB) {
+                    spinB = 1;
+               // }
             }
 
             return spinB;
@@ -106,9 +108,9 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
             double s = Math.abs(Math.sin(2 * (lrad - thetarad)));
             double probB = PbMinus(angleAtDetector) * s;
             if (probB > 0) {
-                //  if (Math.random() <= probB) {
-                spinB = 0;
-                //   }
+              //  if (Rand.getRand().randDouble() <= probB) {
+                    spinB = 0;
+              //  }
             }
             return spinB;
         }
@@ -124,7 +126,7 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
         double b = Math.toRadians(angle);
         double c = Math.cos(b);
         double s = Math.sin(b);
-        double r= settings.getEntanglementEfficiency();
+        double r = settings.getEntanglementEfficiency();
         return (r * r * c * c + s * s) / (1 + r * r);
     }
 
@@ -136,7 +138,7 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
         double b = Math.toRadians(angle);
         double c = Math.cos(b);
         double s = Math.sin(b);
-        double r= settings.getEntanglementEfficiency();
+        double r = settings.getEntanglementEfficiency();
         return (r * r * s * s + c * c) / (1 + r * r);
     }
 
@@ -147,7 +149,7 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
         double b = Math.toRadians(angle);
         double c = Math.cos(b);
         double s = Math.sin(b);
-        double r= settings.getEntanglementEfficiency();
+        double r = settings.getEntanglementEfficiency();
         double t = (r * r * c * c - s * s) / (r * r * c * c + s * s);
         double theta = Math.acos(t) / 2.0;
         return Math.toDegrees(theta);
@@ -161,7 +163,7 @@ public class WangLHVModel extends AbstractLHVModel implements Serializable{
         double b = Math.toRadians(angle);
         double c = Math.cos(b);
         double s = Math.sin(b);
-        double r= settings.getEntanglementEfficiency();
+        double r = settings.getEntanglementEfficiency();
         double t = (-r * r * s * s + c * c) / (r * r * s * s + c * c);
         double theta = Math.acos(t) / 2.0;
         return Math.toDegrees(theta);

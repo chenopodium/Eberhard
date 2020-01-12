@@ -135,7 +135,7 @@ public class Engine implements Serializable {
         }
         inequality.setCounts(counts);
         if (writeLog) {
-            writeResults(continueExperiment);
+            writeResults();
         }
         return inequality.compute();
     }
@@ -161,12 +161,12 @@ public class Engine implements Serializable {
         computeSpinB both times (please take a look at the code), which is symmetrical.
         The inequality breaking is not that good in this case, but still good enough :-)
          */
-        int spinA = model.computeSpinA(angleA, photonAngleDegree);
+        int spinA = model.computeSpinB(angleA, photonAngleDegree);
         int spinB = model.computeSpinB(angleB, photonAngleDegree);
 
         /* this is just for logging */
-        int Adetected = spinA >= 0 ? 1: 0;
-        int Bdetected = spinB >= 0 ? 1: 0;
+        int Adetected = spinA >= 0 ? 1 : 0;
+        int Bdetected = spinB >= 0 ? 1 : 0;
 
         if (writeLog) {
             log += whichAngleA + ", " + whichAngleB + ", " + angleA + ", " + angleB + ", " + spinA + ", " + spinB
@@ -225,6 +225,8 @@ public class Engine implements Serializable {
                             } else if (j > maxj * 0.8) {
                                 in.setCounts(counts);
                                 in.computeString();
+                                this.run(10000, null, false);
+                                p(getSummary());
 
                             }
                             p(count + ": " + greenBold + settings.toShortString() + ", j=" + j + reset
@@ -239,6 +241,9 @@ public class Engine implements Serializable {
                                 in.setCounts(counts);//new Guistina2015(counts);
                                 in.computeString();
                                 p("\n% detected, " + f.format(counts.getPercentBothDetected()) + "%");
+                                counts = null;
+                                this.run(10000, null, false);
+                                p(getSummary());
                             }
 
                         }
@@ -251,7 +256,7 @@ public class Engine implements Serializable {
 
     }
 
-    private void writeResults(boolean continueExperiment) {
+    private void writeResults() {
         writeFile(log, "log.csv", true);
 
         String summary = getSummary();
@@ -291,6 +296,21 @@ public class Engine implements Serializable {
      */
     public void setWriteLog(boolean writeLog) {
         this.writeLog = writeLog;
+    }
+
+    /* Main method and entry point for the program */
+    public static void main(String[] args) {
+
+        long seed = 1234;
+        int trials = 100000;
+
+        Settings settings = new Settings();
+        settings.setSeed(seed);
+        settings.setTrials(trials);
+        Engine engine = new Engine(new WangLHVModel(settings), new Guistina2015());
+
+        engine.findAngles(new Guistina2015());
+        // engine.run(trials, null, false);
     }
 
 }

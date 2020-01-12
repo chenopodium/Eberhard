@@ -32,12 +32,15 @@ public class CH extends Inequality implements Serializable{
     private static final long serialversionUID =1L; 
 
     /* The angles in degrees to use in degrees for detector A and B */
+    
     /*
     private double[] A = {0, 45};  
     private double[] B = {-180 / 16.0, 180 / 16.0};
 */
-    private double[] A = {0, 8};  
-    private double[] B = {1,-8};
+    // A1, 0.0 A2, 14.0 B1, 3.0 B2, -7.0 j=58.
+    //A1, 1.0 A2, 6.0 B1, 2.0 B2, 4.0,
+    private double[] A = {0,6};  
+    private double[] B = {2,4};
     
     // A1, 0.0 A2, 8.0 B1, 1.0 B2, -8.0, j=374.0
     public CH() {

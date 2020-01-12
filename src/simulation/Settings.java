@@ -29,7 +29,7 @@ import java.util.Date;
 public class Settings implements Serializable{
     private static final long serialversionUID =1L; 
     /* The entanglement efficiency to use (referred to as r in many cases ) */
-    private double entanglementEfficiency = 0.7; //r in the  paper from F. Wang
+    private double entanglementEfficiency = 0.6; //r in the  paper from F. Wang
 
     /*
     The (default) angles in degrees to use at the detectors in degrees.

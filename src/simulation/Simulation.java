@@ -52,7 +52,7 @@ public class Simulation {
         p("Please see the README.TXT for instructions");
         int[][] values = null;
         long seed = 1234;
-        String ineq = "C";
+        String ineq = "G";
         String model = "W";
         String mode = "RESTART";
         String statefile = "saved.ser";
@@ -140,8 +140,7 @@ public class Simulation {
                 lhv = new WangLHVModel(settings);
             }
 
-            engine = new Engine(lhv, in);
-   engine.findAngles(in);
+            engine = new Engine(lhv, in);  
         }
 
          engine.run(trials, values, continueExperiment);

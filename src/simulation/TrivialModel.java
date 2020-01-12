@@ -73,7 +73,7 @@ J (prob),0.0445
         double delta = lambda - angleAtDetector;
         double a = Math.toRadians(delta);
         
-        double pdetect = 2.3*Math.abs(Math.sin(a));
+        double pdetect = 2*Math.abs(Math.sin(a));
    
         if (rand.randDouble()<=pdetect) {
             int spin = -(int) Math.signum(Math.sin(a)); 
