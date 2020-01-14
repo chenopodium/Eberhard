@@ -109,9 +109,9 @@ public class Simulation {
                 } else if (key.startsWith("R")) {
                     value = value.toUpperCase();
                     if (value.startsWith("S")) {
-                        mode = "SKEWED";
+                        rand = "SKEWED";
                     } else {
-                        mode = "FAIR";
+                        rand = "FAIR";
                     }
 
                 }
