@@ -24,6 +24,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Just a simple class that runs N trias with the given lhv model and inequality
@@ -55,7 +57,7 @@ public class Engine implements Serializable {
 
     /* Whether to write the results into a file or not */
     boolean writeLog;
-    
+
     /* Whether we use a fair random generator or an unfair one */
     boolean fairGenerator;
 
@@ -85,8 +87,7 @@ public class Engine implements Serializable {
         //rand = Rand.getRand();
         if (fairGenerator) {
             rand = Rand.getRand();
-        }
-        else {
+        } else {
             rand = SkewedRand.getRand(true);
         }
         rand.setSeed(settings.getSeed());
@@ -147,6 +148,7 @@ public class Engine implements Serializable {
 
             }
         }
+
         inequality.setCounts(counts);
         if (writeLog) {
             writeResults();
@@ -291,10 +293,18 @@ public class Engine implements Serializable {
         String summary = settings.toString();
         summary += "\nTrials, " + counts.getTotalTrials() + ", the number of pairs that we have produced in total";
         summary += "\nModel, " + model.getClass().getName() + ", the name of the class that computes the measurement for a photon, an angle at a detector and a hidden variable";
-        summary += "\nInequality, " + inequality.getClass().getName() + ", the name of the class that contains the inequality formula";
-        summary += "\n" + inequality.computeString();
         summary += "\n% detected, " + f.format(counts.getPercentBothDetected()) + "%";
         summary += "\nTotal count , " + counts.getTotalTrials() + "";
+
+        List<Inequality> ins = new ArrayList<>();
+        ins.add(new CHSH());
+        ins.add(new Guistina2015());
+        ins.add(new CH());
+        for (Inequality in : ins) {
+            in.setCounts(counts);
+            summary += "\n\nInequality, " + in.getClass().getName() + ", the name of the class that contains the inequality formula";
+            summary += in.computeString();
+        }
         return summary;
     }
 
