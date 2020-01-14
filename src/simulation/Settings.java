@@ -26,8 +26,9 @@ import java.util.Date;
  *
  * @author croth
  */
-public class Settings implements Serializable{
-    private static final long serialversionUID =1L; 
+public class Settings implements Serializable {
+
+    private static final long serialversionUID = 1L;
     /* The entanglement efficiency to use (referred to as r in many cases ) */
     private double entanglementEfficiency = 0.6; //r in the  paper from F. Wang
 
@@ -35,8 +36,9 @@ public class Settings implements Serializable{
     The (default) angles in degrees to use at the detectors in degrees.
     Note that these values are overwritten by the inequality
      */
-    private double[] A = {0, 45};
-    private double[] B = {-180 / 16.0, 180 / 16.0};
+    private double[] A = {0, 90};
+    private double[] B = {45, 135};
+
     private long seed = 1234;
     private long trials = 100000;
 
@@ -47,11 +49,12 @@ public class Settings implements Serializable{
     }
 
     public String toShortString() {
-        return  "A1, " + getA()[0]
-                + " A2, " + getA()[1] 
-                + " B1, " + getB()[0] 
+        return "A1, " + getA()[0]
+                + " A2, " + getA()[1]
+                + " B1, " + getB()[0]
                 + " B2, " + getB()[1];
     }
+
     @Override
     public String toString() {
         return "Date, " + (new Date(System.currentTimeMillis()).toString() + "\n"
@@ -60,7 +63,7 @@ public class Settings implements Serializable{
                 + "B1, " + getB()[0] + ", angle at detector B in degrees\n"
                 + "B2, " + getB()[1] + ", angle at detector B in degrees\n"
                 + "entanglementEfficiency, " + getEntanglementEfficiency() + "\n"
-                + "Seed, " + getSeed()+", the seed used in the random generator");
+                + "Seed, " + getSeed() + ", the seed used in the random generator");
     }
 
     /**

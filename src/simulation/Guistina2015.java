@@ -34,15 +34,6 @@ public class Guistina2015 extends Inequality implements Serializable {
     private static final long serialversionUID = 1L;
     /* The angles  in degrees to use in degrees for detector A and B */
 
-    /*
-    A1, 89.0, angle at detector A in degrees 
-A2, 88.0, angle at detector A in degrees
-B1, 44.0, angle at detector B in degrees
-B2, 44.0, angle at detector B in degrees
-entanglementEfficiency, 0.6
-Seed, 1234, the seed used in the random generator
-j=142.0
-    */
     private double[] A = {0, 90};
     private double[] B = {45, 135};
 
@@ -77,16 +68,16 @@ j=142.0
     @Override
     public double compute() {
 
-        /* Plus Plus is A detected and B detected */
+        /* A detected and B detected */
         double n11 = getCounts().getDetected(0, 0);
         
-         /* Plus Zero is A deteced and B not detected */
+         /*  A deteced and B not detected */
         double n12 = getCounts().getDetZero(0, 1);
         
-         /* Zero Plus is A not deteced and B detected */
+         /* A not deteced and B detected */
         double n21 = getCounts().getZeroDet(1, 0);
         
-         /* Plus Plus is A detected and B detected */
+         /* A detected and B detected */
         double n22 = getCounts().getDetected(1, 1);
 
         double j = n11
