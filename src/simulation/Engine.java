@@ -55,17 +55,20 @@ public class Engine implements Serializable {
 
     /* Whether to write the results into a file or not */
     boolean writeLog;
+    
+    /* Whether we use a fair random generator or an unfair one */
+    boolean fairGenerator;
 
     /*
     Just a simple class that runs N trias with the given lhv model and inequality
     @param lhv a local hidden variable model
     @param ineq an inequality (like CH)
      */
-    public Engine(AbstractLHVModel lhv, Inequality ineq) {
+    public Engine(AbstractLHVModel lhv, Inequality ineq, boolean fairGenerator) {
         this.model = lhv;
         this.settings = model.getSettings();
-        rand = Rand.getRand();
-        rand.setSeed(settings.getSeed());
+        this.fairGenerator = fairGenerator;
+        createRand();
         // Normally we want to write a log
         this.writeLog = true;
         this.settings = model.getSettings();
@@ -76,6 +79,17 @@ public class Engine implements Serializable {
         this.settings.setA(inequality.getPreferredA());
         this.settings.setB(ineq.getPreferredB());
 
+    }
+
+    private void createRand() {
+        //rand = Rand.getRand();
+        if (fairGenerator) {
+            rand = Rand.getRand();
+        }
+        else {
+            rand = SkewedRand.getRand(true);
+        }
+        rand.setSeed(settings.getSeed());
     }
 
     /* Run given number of trials, and if value is specified,
@@ -92,7 +106,7 @@ public class Engine implements Serializable {
             writeFile(header, "log.csv", false);
         }
         log = "";
-
+        rand.setTrials(trials);
         if (values != null && values.length > 0) {
             trials = values.length;
 
@@ -111,8 +125,8 @@ public class Engine implements Serializable {
         } else if (settings.getAngleGenerator() == Settings.LAMBDAGENERATOR.RANDOMANGLES) {
             // Generate random angles for each trial
             for (int t = 0; t < trials; t++) {
-                int whichA = rand.randInt(0, 1);
-                int whichB = rand.randInt(0, 1);
+                int whichA = rand.randBit();
+                int whichB = rand.randBit();
                 runOnePair(rand.randDouble(0, 180), whichA, whichB);
                 if (t > 0 && t % 500000 == 0) {
                     p("Trial " + t + " of " + trials + " with " + values[t][0] + " and " + values[t][1]);
@@ -122,8 +136,8 @@ public class Engine implements Serializable {
             for (int t = 0; t < trials;) {
                 // Iterate over all the angles uniformly
                 for (double photonAngle = 0; photonAngle < 180; photonAngle++) {
-                    int whichA = rand.randInt(0, 1);
-                    int whichB = rand.randInt(0, 1);
+                    int whichA = rand.randBit();
+                    int whichB = rand.randBit();
                     runOnePair(photonAngle, whichA, whichB);
                     t++;
                     if (t % 500000 == 0) {
@@ -214,6 +228,7 @@ public class Engine implements Serializable {
                         }
                         // resset the counts
                         counts = null;
+                        createRand();
                         double j = run(1000, null, false);
                         count++;
                         if (count % 10000 == 0 || j > maxj * 0.8) {
@@ -225,8 +240,11 @@ public class Engine implements Serializable {
                             } else if (j > maxj * 0.8) {
                                 in.setCounts(counts);
                                 in.computeString();
-                                this.run(10000, null, false);
-                                p(getSummary());
+                                createRand();
+                                double res = this.run(100000, null, false);
+                                if (res > 0) {
+                                    p(getSummary());
+                                }
 
                             }
                             p(count + ": " + greenBold + settings.toShortString() + ", j=" + j + reset
@@ -240,10 +258,14 @@ public class Engine implements Serializable {
                                 p("j=" + maxj);
                                 in.setCounts(counts);//new Guistina2015(counts);
                                 in.computeString();
-                                p("\n% detected, " + f.format(counts.getPercentBothDetected()) + "%");
+
                                 counts = null;
-                                this.run(10000, null, false);
-                                p(getSummary());
+                                createRand();
+                                double res = this.run(100000, null, false);
+                                if (res > 0) {
+                                    p("\n% detected, " + f.format(counts.getPercentBothDetected()) + "%");
+                                    p(getSummary());
+                                }
                             }
 
                         }
@@ -307,9 +329,10 @@ public class Engine implements Serializable {
         Settings settings = new Settings();
         settings.setSeed(seed);
         settings.setTrials(trials);
-        Engine engine = new Engine(new WangLHVModel(settings), new Guistina2015());
+        Inequality in = new Guistina2015();
+        Engine engine = new Engine(new WangLHVModel(settings), in, false);
 
-        engine.findAngles(new Guistina2015());
+        engine.findAngles(in);
         // engine.run(trials, null, false);
     }
 

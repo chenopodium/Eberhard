@@ -56,6 +56,7 @@ public class Simulation {
         String model = "W";
         String mode = "RESTART";
         String statefile = "saved.ser";
+        String rand="SKEWED";
         int trials = 100000;
 
         if (args != null && args.length > 1) {
@@ -104,6 +105,15 @@ public class Simulation {
                     }
 
                 }
+                else if (key.startsWith("R")) {
+                    value = value.toUpperCase();
+                    if (value.startsWith("S")) {
+                        mode = "SKEWED";
+                    } else {
+                        mode = "FAIR";
+                    }
+
+                }
 
             }
 
@@ -113,7 +123,7 @@ public class Simulation {
         Settings settings = new Settings();
         settings.setSeed(seed);
         settings.setTrials(trials);
-
+        boolean fair = rand.toUpperCase().startsWith("F");
         boolean continueExperiment = false;
         if (mode.equalsIgnoreCase("CONTINUE")) {
             p("Attempting to continue last run using file " + statefile);
@@ -140,9 +150,10 @@ public class Simulation {
                 lhv = new WangLHVModel(settings);
             }
 
-            engine = new Engine(lhv, in);  
+            engine = new Engine(lhv, in,fair);  
         }
 
+       
          engine.run(trials, values, continueExperiment);
         // save model to a file with all settings, in case we want to continue
         saveModel(engine, statefile);

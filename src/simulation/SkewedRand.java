@@ -29,55 +29,61 @@ import java.util.Random;
  *
  * @author croth
  */
-public class Rand implements Serializable {
+public class SkewedRand extends Rand {
 
     private static final long serialversionUID = 1L;
 
-    private Random generator;
-
-    private static Rand rand;
-
-    protected int trials;
-
-    public static Rand getRand() {
-        if (rand == null) {
-            rand = new Rand();
+    
+    int counter;
+    static SkewedRand skewed;
+  
+    public static Rand getRand(boolean reset) {
+        if (skewed == null) {
+            skewed = new SkewedRand();
         }
-        return rand;
+        if (reset) skewed.counter = 0;
+        return skewed;
     }
 
-    public Rand() {
-        generator = new Random();
+    public SkewedRand() {
+        super();
     }
 
+    
     /* Random int from from (inclusive) to to (inclusive) */
-    public int randBit() {
-        double d = randDouble();
-        if (d > 0.5) {
-            return 1 ;
-        } else {
-            return 0;
-        }
+    @Override
+    public int randBit() {  
+        
+        double p = (double)counter/2.0/trials;
+        counter++;
+        
+        double r = super.randDouble();
+         if (p<0.5) {
+             if (r <0.65) return 0;
+             else return 1;
+         }
+         else {
+              if (r <0.5) return 0;
+             else return 1;
+         }
+        
     }
 
+    @Override
     public double randDouble() {
-        return generator.nextDouble();
+        double d= super.randDouble();
+        double p = (double)counter/2.0/trials;
+       
+        return d;
     }
 
     /* Random int from from (inclusive) to to (exclusive) */
+    @Override
     public double randDouble(double from, double to) {
-        return generator.nextDouble() * (to - from) + from;
+        double p = (double)counter/2.0/trials;
+        double d =super.randDouble(from, to);
+        return d;
     }
 
-    public void setSeed(long s) {
-        generator.setSeed(s);
-    }
-
-    /**
-     * @param trials the trials to set
-     */
-    public void setTrials(int trials) {
-        this.trials = trials;
-    }
 
 }

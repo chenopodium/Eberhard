@@ -34,13 +34,13 @@ public class CH extends Inequality implements Serializable{
     /* The angles in degrees to use in degrees for detector A and B */
     
     /*
-    private double[] A = {0, 45};  
-    private double[] B = {-180 / 16.0, 180 / 16.0};
-*/
-    // A1, 0.0 A2, 14.0 B1, 3.0 B2, -7.0 j=58.
-    //A1, 1.0 A2, 6.0 B1, 2.0 B2, 4.0,
-    private double[] A = {0,6};  
-    private double[] B = {2,4};
+    A1, 0.0, angle at detector A in degrees 
+A2, 1.0, angle at detector A in degrees
+B1, 2.0, angle at detector B in degrees
+B2, -36.0, angle at detector B in degrees
+    */
+    private double[] A = {0,1};  
+    private double[] B = {2,-7};
     
     // A1, 0.0 A2, 8.0 B1, 1.0 B2, -8.0, j=374.0
     public CH() {
@@ -93,16 +93,16 @@ public class CH extends Inequality implements Serializable{
         int n12 = getCounts().getCoincidenceCounts(0, 1); // N12(a, b’)
         int n21 = getCounts().getCoincidenceCounts(1, 0); // N12(a’, b)
         int n22 = getCounts().getCoincidenceCounts(1, 1); // N12(a’, b’) 
-        int sA = getCounts().getSingleA(1);            // N1(a’)
-        int sB = getCounts().getSingleB(0);            // N2(b)
+        int sA = getCounts().getSingleA(0);            // N1(a)
+        int sB = getCounts().getSingleB(1);            // N2(b')
         // From Richard: N12(a, b) – N12(a, b’) + N12(a’, b) +N12(a’, b’) -N1(a’) – N2(b) <= 0
         
         int j = n11   //  N12(a, b)
                 - n12 //  N12(a, b’)
                 + n21 //  N12(a’, b)
                 + n22 //  N12(a’, b’) 
-                - sA  //  N1(a’) 
-                - sB; //  N2(b)
+                - sA  //  N1(a) 
+                - sB; //  N2(b')
 
         return j;
     }
@@ -118,15 +118,15 @@ public class CH extends Inequality implements Serializable{
         int n12 = getCounts().getCoincidenceCounts(0, 1); // N12(a, b’)
         int n21 = getCounts().getCoincidenceCounts(1, 0); // N12(a’, b)
         int n22 = getCounts().getCoincidenceCounts(1, 1); // N12(a’, b’) 
-        int sA = getCounts().getSingleA(1);            // N1(a’)
-        int sB = getCounts().getSingleB(0);            // N2(b)
-               
+        int sA = getCounts().getSingleA(0);            // N1(a)
+        int sB = getCounts().getSingleB(1);            // N2(b')
+        
         String s = "\nName, CH inequality, see https://www.slideshare.net/gill1109/yet-another-statistical-analysis-of-the-data-of-the-loophole-free-experiments-of-2015-revised";
          // From Richard: N12(a, b) – N12(a, b’) + N12(a’, b) +N12(a’, b’) -N1(a’) – N2(b) <= 0
         s +="\nFormula, CH = N11 – N12 + N21 + N22  - singleA(1) – singleB(2) <= 0 ";
         s += "\nExplanation, if J >0 it agrees with QM and if J <= 0 it is a classical result";
         s += "\nN11, " + n11 + "\nN12, " + n12 + "\nN21, " + n21 + "\nN22, " + n22 + 
-              "\nsingleA(2) , " + sA + "\nsingleB(1) , " + sB;
+              "\nsingleA(1) , " + sA + "\nsingleB(2) , " + sB;
 
         double CH = compute();
 

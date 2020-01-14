@@ -34,10 +34,17 @@ public class Guistina2015 extends Inequality implements Serializable {
     private static final long serialversionUID = 1L;
     /* The angles  in degrees to use in degrees for detector A and B */
 
-  
-    // A1, 0.0 A2, 30.0 B1, 17.0 B2, -1.0, j=62.0
-    private double[] A = {0, 30};
-    private double[] B = {17, -1};
+    /*
+    A1, 89.0, angle at detector A in degrees 
+A2, 88.0, angle at detector A in degrees
+B1, 44.0, angle at detector B in degrees
+B2, 44.0, angle at detector B in degrees
+entanglementEfficiency, 0.6
+Seed, 1234, the seed used in the random generator
+j=142.0
+    */
+    private double[] A = {0, 1};
+    private double[] B = {2, -12};
 
     /*
      @return the preferred angles at detector A in degrees (such as 0, 45)
