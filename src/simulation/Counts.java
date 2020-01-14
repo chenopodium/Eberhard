@@ -32,19 +32,23 @@ public class Counts implements Serializable {
 
     private int[] singleA;
     private int[] singleB;
-    private int[][] plus_plus;
+    private int[][] detected;
+     private int[][] plusplus;
+    private int[][] tot;
     private int[][] coincidence;
-    private int[][] plus_zero;
-    private int[][] zero_plus;
+    private int[][] det_zero;
+    private int[][] zero_det;
 
     private int totalTrials;
     private int bothDetected;
 
     public Counts() {
-        plus_plus = new int[2][2];
+        plusplus = new int[2][2];
+        detected = new int[2][2];
         coincidence = new int[2][2];
-        plus_zero = new int[2][2];
-        zero_plus = new int[2][2];
+        det_zero = new int[2][2];
+        zero_det = new int[2][2];
+        tot = new int[2][2];
         singleA = new int[2];
         singleB = new int[2];
 
@@ -90,8 +94,13 @@ public class Counts implements Serializable {
     }
 
     /* @returns the number of trials where the spin measured at A and B was ++ */
-    public int getPlusPlusCounts(int whichA, int whichB) {
-        return plus_plus[whichA][whichB];
+    public int getDetected(int whichA, int whichB) {
+        return detected[whichA][whichB];
+    }
+
+    /* @returns the number of trials where the spin measured at A and B was ++ */
+    public double getCorr(int whichA, int whichB) {
+        return (double) coincidence[whichA][whichB] / (double) tot[whichA][whichB];
     }
 
     /* @returns the number of trials where the spin measured at A and B was ++ */
@@ -100,18 +109,18 @@ public class Counts implements Serializable {
     }
 
     /* @returns the number of trials where the spin measured at A and B was +0 */
-    public int getPlusZeroCounts(int whichA, int whichB) {
-        return plus_zero[whichA][whichB];
+    public int getDetZero(int whichA, int whichB) {
+        return det_zero[whichA][whichB];
     }
 
     /* @returns the number of trials where the spin measured at A and B was 0+ */
-    public int getZeroPlusCounts(int whichA, int whichB) {
-        return zero_plus[whichA][whichB];
+    public int getZeroDet(int whichA, int whichB) {
+        return zero_det[whichA][whichB];
     }
 
     /* @returns the percent of trials where the spin measured at A and B was ++ */
-    public double getPlusPlusPercent(int whichA, int whichB) {
-        return (double) plus_plus[whichA][whichB] / (double) totalTrials * 100.0;
+    public double getDetectedPercent(int whichA, int whichB) {
+        return (double) detected[whichA][whichB] / (double) totalTrials * 100.0;
     }
 
     /* @param whichA The angle to use for A. 0 for a1 and or 1 a2. 
@@ -132,20 +141,31 @@ public class Counts implements Serializable {
         if (spinB == 1) {
             singleB[whichB]++;
         }
+        
+        if (totalTrials <10) {
+         //   p("whichA: "+whichA+", whichB: "+whichB+", spinA: "+spinA+", spinB: "+spinB);
+        }
         if (!Adetected && !Bdetected) {
             // BOTH NOT DETECTED  - THEY ARE NOT RECORDED ANYWHERE          
         } else if (!Adetected) {  // ONLY B DETECTED
-            zero_plus[whichA][whichB]++;
+            zero_det[whichA][whichB]++;
         } else if (!Bdetected) {  // ONLY A DETECTED
-            plus_zero[whichA][whichB]++;
+            det_zero[whichA][whichB]++;
         } else if (Adetected && Bdetected) { // BOTH ARE DETECTED, 
+            tot[whichA][whichB]++;
             bothDetected++;
-
-            plus_plus[whichA][whichB]++;
+            detected[whichA][whichB]++;
             if (spinA == spinB) {
                 coincidence[whichA][whichB]++;
             }
+            if (spinA == 1 && spinB ==1) {
+                plusplus[whichA][whichB]++;
+            }
         }
+    }
+    
+    private void p(String s) {
+        System.out.println("Counts: "+s);
     }
 
 }

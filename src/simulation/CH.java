@@ -39,8 +39,9 @@ A2, 1.0, angle at detector A in degrees
 B1, 2.0, angle at detector B in degrees
 B2, -36.0, angle at detector B in degrees
     */
-    private double[] A = {0,1};  
-    private double[] B = {2,-7};
+    private double[] A = {0, 90};
+    private double[] B = {45, 135};
+
     
     // A1, 0.0 A2, 8.0 B1, 1.0 B2, -8.0, j=374.0
     public CH() {

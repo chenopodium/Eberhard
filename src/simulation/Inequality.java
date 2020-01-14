@@ -58,6 +58,10 @@ public abstract class Inequality {
     protected static void p(String s) {
         System.out.println(s);
     }
+    
+    public boolean isBroken(double result) {
+        return  result >0;
+    }
 
     /**
      * @return the counts

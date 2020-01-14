@@ -59,7 +59,7 @@ public class SkewedRand extends Rand {
         
         double r = super.randDouble();
          if (p<0.5) {
-             if (r <0.65) return 0;
+             if (r <0.66) return 0;
              else return 1;
          }
          else {

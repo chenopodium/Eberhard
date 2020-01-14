@@ -43,8 +43,8 @@ entanglementEfficiency, 0.6
 Seed, 1234, the seed used in the random generator
 j=142.0
     */
-    private double[] A = {0, 1};
-    private double[] B = {2, -12};
+    private double[] A = {0, 90};
+    private double[] B = {45, 135};
 
     /*
      @return the preferred angles at detector A in degrees (such as 0, 45)
@@ -78,16 +78,16 @@ j=142.0
     public double compute() {
 
         /* Plus Plus is A detected and B detected */
-        double n11 = getCounts().getPlusPlusCounts(0, 0);
+        double n11 = getCounts().getDetected(0, 0);
         
          /* Plus Zero is A deteced and B not detected */
-        double n12 = getCounts().getPlusZeroCounts(0, 1);
+        double n12 = getCounts().getDetZero(0, 1);
         
          /* Zero Plus is A not deteced and B detected */
-        double n21 = getCounts().getZeroPlusCounts(1, 0);
+        double n21 = getCounts().getZeroDet(1, 0);
         
          /* Plus Plus is A detected and B detected */
-        double n22 = getCounts().getPlusPlusCounts(1, 1);
+        double n22 = getCounts().getDetected(1, 1);
 
         double j = n11
                 - n12
@@ -104,10 +104,10 @@ j=142.0
     @Override
     public String computeString() {
 
-        double n11 = getCounts().getPlusPlusCounts(0, 0);
-        double n12 = getCounts().getPlusZeroCounts(0, 1);
-        double n21 = getCounts().getZeroPlusCounts(1, 0);
-        double n22 = getCounts().getPlusPlusCounts(1, 1);
+        double n11 = getCounts().getDetected(0, 0);
+        double n12 = getCounts().getDetZero(0, 1);
+        double n21 = getCounts().getZeroDet(1, 0);
+        double n22 = getCounts().getDetected(1, 1);
 
         /* Using commas so that it can be imported into Excel */
         String s = "\nName, Inequality used in the Guistina 2015 experiment, see https://journals.aps.org/prl/supplemental/10.1103/PhysRevLett.115.250401/Supplemental_material_final.pdf";

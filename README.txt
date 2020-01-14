@@ -29,9 +29,10 @@ Arguments:
              RESTART: (default) Clear all data and start from scratch
              CONTINUE: loads the last run with all data and settings, and continues with the specified nr of trials
 
--inequality: CH or Guistina.
+-inequality: CH, Guistina or CHSH (S)
              CH uses N11 + N12 + N21 - N22 - singleA - singleB (<0 is classical)
              Guistina uses N11(++) - N12(+0) - N21(0+) - N22(++) (<0 is classical)
+             CHSC uses c11 - c12 + c21 +c22 (<2 is classical)
 -model: Wang or Trivial
              Trivial: trivial model using something similar to sin(delta) for measurement, just as a comparison to the other model
              Wang (default): F. Wang's model from the paper above

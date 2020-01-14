@@ -32,17 +32,7 @@ public class TrivialModel extends AbstractLHVModel implements Serializable{
     
     private Rand rand;
     /*
-    A dummy model, but it can still break it :-)
-    
-J, N11++ - N12+0 - N210+ - N22++
-(J > 0 is QM, J <=0 is classical)
-N11 ++, 456.0
-N12 +0, 0.0
-N21 0+, 0.0
-N22 ++, 367.0
-J,89.0
-J (prob),0.0445
-323: A1, 0.0 A2, 1.0 B1, 5.0 B2, 11.0, j=89.0, 82.95% detected
+    A dummy model
      */
     public TrivialModel(Settings settings) {
         super(settings);
@@ -73,15 +63,22 @@ J (prob),0.0445
         double delta = lambda - angleAtDetector;
         double a = Math.toRadians(delta);
         
-        double pdetect = 2*Math.abs(Math.sin(a));
+        double pdetect = 2.3*Math.abs(Math.sin(a));
    
+        /*
+        double theta = vars.getTheta();      
+        double a = Math.toRadians(theta + detector.getAngleInDegrees());
+        double pdetect = 2.3*Math.abs(Math.sin(a));        
+        if (Math.random()<=pdetect) return true;
+        */
         if (rand.randDouble()<=pdetect) {
+             // we detected it
             int spin = -(int) Math.signum(Math.sin(a)); 
-            if (spin <0) spin =1;
+            if (spin <0) spin =0;
         
             return spin;
         }
-        else return -1;
+        else return -1; // we did not detect it
     }
     /*
       Compute the spin at detector A. 

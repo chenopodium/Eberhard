@@ -53,10 +53,10 @@ public class Simulation {
         int[][] values = null;
         long seed = 1234;
         String ineq = "G";
-        String model = "W";
+        String model = "T";
         String mode = "RESTART";
         String statefile = "saved.ser";
-        String rand="SKEWED";
+        String rand = "SKEWED";
         int trials = 100000;
 
         if (args != null && args.length > 1) {
@@ -84,7 +84,9 @@ public class Simulation {
                     }
                 } else if (key.startsWith("I")) {
                     value = value.toUpperCase();
-                    if (value.startsWith("C")) {
+                    if (value.startsWith("S") || value.startsWith("CHS")) {
+                        ineq = "S";
+                    } else if (value.startsWith("C")) {
                         ineq = "CH";
                     } else if (value.startsWith("G")) {
                         ineq = "GUISTINA";
@@ -92,9 +94,9 @@ public class Simulation {
                 } else if (key.startsWith("MODEL")) {
                     value = value.toUpperCase();
                     if (value.startsWith("T")) {
-                        ineq = "TRIVIAL";
+                        model = "TRIVIAL";
                     } else if (value.startsWith("W")) {
-                        ineq = "WANG";
+                        model = "WANG";
                     }
                 } else if (key.startsWith("MODE")) {
                     value = value.toUpperCase();
@@ -104,8 +106,7 @@ public class Simulation {
                         mode = "RESTART";
                     }
 
-                }
-                else if (key.startsWith("R")) {
+                } else if (key.startsWith("R")) {
                     value = value.toUpperCase();
                     if (value.startsWith("S")) {
                         mode = "SKEWED";
@@ -136,9 +137,10 @@ public class Simulation {
         } else {
             Inequality in;
             AbstractLHVModel lhv;
-            if (ineq.startsWith("C")) {
+            if (ineq.startsWith("S")  || ineq.startsWith("CHS")) {
+                in = new CHSH();
+            } else if (ineq.startsWith("C")) {
                 in = new CH();
-
             } else {
                 in = new Guistina2015();
             }
@@ -150,11 +152,10 @@ public class Simulation {
                 lhv = new WangLHVModel(settings);
             }
 
-            engine = new Engine(lhv, in,fair);  
+            engine = new Engine(lhv, in, fair);
         }
 
-       
-         engine.run(trials, values, continueExperiment);
+        engine.run(trials, values, continueExperiment);
         // save model to a file with all settings, in case we want to continue
         saveModel(engine, statefile);
         System.exit(0);

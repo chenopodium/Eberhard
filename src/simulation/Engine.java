@@ -231,10 +231,11 @@ public class Engine implements Serializable {
                         createRand();
                         double j = run(1000, null, false);
                         count++;
-                        if (count % 10000 == 0 || j > maxj * 0.8) {
+                        boolean passed = in.isBroken(j);
+                        if (count % 10000 == 0 || (j > maxj * 0.8 && passed)) {
                             String greenBold = "\033[34;1m";
                             String reset = "\033[0m";
-                            if (j <= 0) {
+                            if (!passed) {
                                 greenBold = "";
                                 reset = "";
                             } else if (j > maxj * 0.8) {
@@ -242,7 +243,7 @@ public class Engine implements Serializable {
                                 in.computeString();
                                 createRand();
                                 double res = this.run(100000, null, false);
-                                if (res > 0) {
+                                if (in.isBroken(res)) {
                                     p(getSummary());
                                 }
 
@@ -250,7 +251,7 @@ public class Engine implements Serializable {
                             p(count + ": " + greenBold + settings.toShortString() + ", j=" + j + reset
                                     + ", " + f.format(counts.getPercentBothDetected()) + "% detected");
                         }
-                        if (j >= 0) {
+                        if (in.isBroken(j)) {
                             if (j >= maxj) {
                                 maxj = j;
                                 maxsettings = settings;
@@ -262,7 +263,7 @@ public class Engine implements Serializable {
                                 counts = null;
                                 createRand();
                                 double res = this.run(100000, null, false);
-                                if (res > 0) {
+                                if (in.isBroken(res)) {
                                     p("\n% detected, " + f.format(counts.getPercentBothDetected()) + "%");
                                     p(getSummary());
                                 }
@@ -329,7 +330,7 @@ public class Engine implements Serializable {
         Settings settings = new Settings();
         settings.setSeed(seed);
         settings.setTrials(trials);
-        Inequality in = new Guistina2015();
+        Inequality in = new CH();
         Engine engine = new Engine(new WangLHVModel(settings), in, false);
 
         engine.findAngles(in);
