@@ -46,6 +46,9 @@ public class Engine implements Serializable {
     /* The model that computes the spin, given an angle and a hidden variable */
     AbstractLHVModel model;
 
+    /* The entangler. Normally not all photons are entangled */
+    Entangler entangler;
+
     /* The counts that are collected at each detector during the experiment */
     Counts counts;
 
@@ -78,6 +81,7 @@ public class Engine implements Serializable {
         if (inequality == null) {
             inequality = new CH();
         }
+        this.entangler = new Entangler();
         this.settings.setA(inequality.getPreferredA());
         this.settings.setB(ineq.getPreferredB());
 
@@ -88,7 +92,7 @@ public class Engine implements Serializable {
         if (fairGenerator) {
             rand = Rand.getRand();
         } else {
-            rand = SkewedRand.getRand(true, 0.13);
+            rand = SkewedRand.getRand(true, 0.1);
         }
         rand.setSeed(settings.getSeed());
     }
@@ -108,6 +112,7 @@ public class Engine implements Serializable {
         }
         log = "";
         rand.setTrials(trials);
+        entangler.setTrials(trials);
         if (values != null && values.length > 0) {
             trials = values.length;
 
@@ -130,7 +135,7 @@ public class Engine implements Serializable {
                 int whichB = rand.randBit();
                 runOnePair(rand.randDouble(0, 180), whichA, whichB);
                 if (t > 0 && t % 500000 == 0) {
-                    p("Trial " + t + " of " + trials + " with " + values[t][0] + " and " + values[t][1]);
+                    p("Trial " + t + " of " + trials);
                 }
             }
         } else {
@@ -142,7 +147,7 @@ public class Engine implements Serializable {
                     runOnePair(photonAngle, whichA, whichB);
                     t++;
                     if (t % 500000 == 0) {
-                        p("Trial " + t + " of " + trials + " with " + values[t][0] + " and " + values[t][1]);
+                        p("Trial " + t + " of " + trials );
                     }
                 }
 
@@ -177,8 +182,14 @@ public class Engine implements Serializable {
         computeSpinB both times (please take a look at the code), which is symmetrical.
         The inequality breaking is not that good in this case, but still good enough :-)
          */
-        int spinA = model.computeSpinB(angleA, photonAngleDegree);
-        int spinB = model.computeSpinB(angleB, photonAngleDegree);
+        boolean gotEntangledPair = entangler.photonsCreatedAndEntangled();
+        int spinA = -1;
+        int spinB = -1;
+        if (gotEntangledPair) {
+            spinA = model.computeSpinB(angleA, photonAngleDegree);
+            spinB = model.computeSpinB(angleB, photonAngleDegree);
+        }
+        
 
         /* this is just for logging */
         int Adetected = spinA >= 0 ? 1 : 0;
@@ -283,10 +294,31 @@ public class Engine implements Serializable {
 
     public String getCountSummary() {
         double tot = counts.getTotalTrials();
+        int sa1 = counts.getSettingA(0);
+        int sa2 = counts.getSettingA(1);
+        int sb1 = counts.getSettingB(0);
+        int sb2 = counts.getSettingB(1);
+
         double a = counts.getSingleA();
         double b = counts.getSingleB();
-        String s = "\nA1: " + counts.getSingleA(0) + ", A2: " + counts.getSingleA(1) + ", B1: " + counts.getSingleB(0) + ", B2: " + counts.getSingleB(1);
-        s += "\n% of A: A1%: " + counts.getSingleA(0) * 100 / a + ", A2%: " + counts.getSingleA(1) * 100 / a ;
+        
+        double a1b1 = counts.getSettingAB(0, 0) * 100.0 / tot;
+        double a1b2 = counts.getSettingAB(0, 1) * 100.0 / tot;
+        double a2b1 = counts.getSettingAB(1, 0) * 100.0 / tot;
+        double a2b2 = counts.getSettingAB(1, 1) * 100.0 / tot;
+        
+        String s = "\n\nSetting Counts:";
+        s += "\ntotal, " + tot;
+        s += "\nSA1, " + sa1 + ", SA2, " + sa2 + ", SB1, " + sb1 + ", SB2, " + sb2;
+        s += "\nSA1B1, " + counts.getSettingAB(0, 0) + ", SA1B2, " + counts.getSettingAB(0, 1)
+                + ", SA2B1, " + counts.getSettingAB(1, 0) + ", SA1B2, " + counts.getSettingAB(1, 1);
+        s += "\n%: SA1, " + sa1 * 100.0 / tot + ", SA2, " + sa2 * 100.0 / tot + ", SB1, " + sb1 * 100.0 / tot + ", SB2, " + sb2 * 100.0 / tot;
+        s += "\n%: SA1B1, " +a1b1+ ", SA1B2, " +a1b2
+                + ", SA2B1, " +a2b1+ ", SA2B2, " +a2b2;
+        
+        s += "\n\nMeasurement Counts:\n";
+        s += "\nA1, " + counts.getSingleA(0) + ", A2, " + counts.getSingleA(1) + ", B1, " + counts.getSingleB(0) + ", B2, " + counts.getSingleB(1);
+        s += "\n% of A: A1%: " + counts.getSingleA(0) * 100 / a + ", A2%: " + counts.getSingleA(1) * 100 / a;
         s += "\n% of B: B1%: " + counts.getSingleB(0) * 100 / b + ", B2%: " + counts.getSingleB(1) * 100 / b;
         s += "\n% of tot: A1%: " + counts.getSingleA(0) * 100 / tot + ", A2%: " + counts.getSingleA(1) * 100 / tot + ", B1%: " + counts.getSingleB(0) * 100 / tot + ", B2%: " + counts.getSingleB(1) * 100 / tot;
         s += "\nA: " + a + ", " + counts.getPercentSingleA() + ", B: " + b + ", " + counts.getPercentSingleB();
@@ -311,14 +343,14 @@ public class Engine implements Serializable {
 
         List<Inequality> ins = new ArrayList<>();
         ins.add(inequality);
-      //  ins.add(new Guistina2015());
-       // ins.add(new CH());
+        //  ins.add(new Guistina2015());
+        // ins.add(new CH());
         for (Inequality in : ins) {
             in.setCounts(counts);
             summary += "\n\nInequality, " + in.getClass().getName() + ", the name of the class that contains the inequality formula";
             summary += in.computeString();
         }
-       // summary += getCountSummary();
+        summary += getCountSummary();
         return summary;
     }
 
@@ -399,7 +431,7 @@ public class Engine implements Serializable {
         rand.setSeed(settings.getSeed());
         for (int i = 0; i < tot; i++) {
             counts = null;
-            
+
             double j = run(10000, null, false);
             boolean passed = in.isBroken(j);
 
@@ -413,13 +445,13 @@ public class Engine implements Serializable {
         if (per > 50) {
             p(getCountSummary());
             p(getSummary(in));
-            for (int t = 0; t < 10; t++) {
+            for (int t = 0; t < 5; t++) {
                 counts = null;
                 rand = SkewedRand.getRand(true, bias);
-               
+
                 double j = run(100000, null, false);
-                p("j:"+j);
-                if (j>0) {
+                p("j:" + j);
+                if (j > 0) {
                     p(getCountSummary());
                     p(getSummary(in));
                 }
@@ -432,7 +464,7 @@ public class Engine implements Serializable {
     public static void main(String[] args) {
 
         long seed = 1234;
-        int trials = 100000;
+        int trials = 1000000;
 
         Settings settings = new Settings();
         settings.setSeed(seed);
@@ -443,7 +475,7 @@ public class Engine implements Serializable {
         // engine.findAngles(in);
         // engine.run(trials, null, false);
         //engine.findRnd(in);
-        for (double bias = 0.1; bias < 0.21; bias += 0.01) {
+        for (double bias = 0.40; bias < 0.5; bias += 0.1) {
             engine.testRand(in, bias);
         }
     }

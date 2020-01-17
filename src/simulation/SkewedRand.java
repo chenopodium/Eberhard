@@ -33,16 +33,17 @@ public class SkewedRand extends Rand {
 
     private static final long serialversionUID = 1L;
 
-    
     int counter;
     double bias;
     static SkewedRand skewed;
-  
+
     public static Rand getRand(boolean reset, double bias) {
         if (skewed == null) {
             skewed = new SkewedRand();
         }
-        if (reset) skewed.counter = 0;
+        if (reset) {
+            skewed.counter = 0;
+        }
         skewed.bias = bias;
         return skewed;
     }
@@ -52,45 +53,40 @@ public class SkewedRand extends Rand {
     }
 
     @Override
-     public void setTrials(int trials) {
+    public void setTrials(int trials) {
         this.trials = trials;
         this.counter = 0;
     }
-    
+
     /* Random int from from (inclusive) to to (inclusive) */
     @Override
-    public int randBit() {  
-        
-        double p = (double)counter/2.0/trials;
+    public int randBit() {
+
+        double per = (double) counter * 100 / 2.0 / trials;
         counter++;
-        
+
+        /*
+        0  - 25:  generate 12 equally. Generate fewer photons
+        25 - 50:  generate 2 more. Generate a bit more photons
+        50 - 75:  generate 1 more. Generate normal photons
+        75 - 100: generate 12 equally. Generate fewer photons
+        */
         double r = super.randDouble();
-         if (p<0.5) {
-             if (r <bias) return 0;
-             else return 1;
-         }
+        if (per < 28) {
+            return r <0.5? 0:1;
+        }
+        else if (per < 52) {
+            return r <0.5 + bias ? 1 :0;
+        }
+         else if (per < 73) {
+            return r <0.5 + bias ? 0 : 1;
+        }
          else {
-              if (r >bias) return 0;
-             else return 1;
+             return r <0.5? 0:1;
          }
-        
+
     }
 
-    @Override
-    public double randDouble() {
-        double d= super.randDouble();
-        double p = (double)counter/2.0/trials;
-       
-        return d;
-    }
-
-    /* Random int from from (inclusive) to to (exclusive) */
-    @Override
-    public double randDouble(double from, double to) {
-        double p = (double)counter/2.0/trials;
-        double d =super.randDouble(from, to);
-        return d;
-    }
 
 
 }

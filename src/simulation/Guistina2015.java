@@ -100,22 +100,32 @@ public class Guistina2015 extends Inequality implements Serializable {
         double n21 = getCounts().getZeroDet(1, 0);
         double n22 = getCounts().getDetected(1, 1);
 
+        
+        double tot = getCounts().getTotalTrials();
+        double a1b1 = getCounts().getSettingAB(0, 0) * 100.0 / tot;
+        double a1b2 = getCounts().getSettingAB(0, 1) * 100.0 / tot;
+        double a2b1 = getCounts().getSettingAB(1, 0) * 100.0 / tot;
+        double a2b2 = getCounts().getSettingAB(1, 1) * 100.0 / tot;
+        
+        
         /* Using commas so that it can be imported into Excel */
         String s = "\nName, Inequality used in the Guistina 2015 experiment, see https://journals.aps.org/prl/supplemental/10.1103/PhysRevLett.115.250401/Supplemental_material_final.pdf";
         s += "\nFormula, J = N11(++) - N12(+0) - N21(0+) - N22(++)";
         s += "\nExplanation, if J > 0 is agrees with QM and if J <=0 it is a classical result\n";
 
-        s += "\nN11 ++, " + n11;
-        s += "\nN12 +0, " + n12;
-        s += "\nN21 0+, " + n21;
-        s += "\nN22 ++, " + n22;
+        s += "\nSetting, Count, % Setting, Scaled back to fair";
+        s += "\nN11 ++, " + n11+", "+a1b1+", "+n11/a1b1*25.0;
+        s += "\nN12 +0, " + n12+", "+a1b2+", "+n12/a1b2*25.0;
+        s += "\nN21 0+, " + n21+", "+a2b1+", "+n21/a2b1*25.0;
+        s += "\nN22 ++, " + n22+", "+a2b1+", "+n22/a2b2*25.0;
 
         double j = compute();
+        
+        double jfair = n11/a1b1*25.0 - n12/a1b2*25.0 - n21/a2b1*25.0 -n22/a2b2*25.0;
 
-        s += "\nJ," + j;
+        s += "\nJ," + j+", ,"+jfair;
 
-        double tot = getCounts().getTotalTrials();
-
+    
         double pj = j / tot;
 
         s += "\nJ/total," + pj;

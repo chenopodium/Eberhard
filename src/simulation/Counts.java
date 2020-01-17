@@ -40,12 +40,14 @@ public class Counts implements Serializable {
     private int[][] zero_det;
     private int[] Acounts;
     private int[] Bcounts;
+    private int[][] settingcounts;
 
     private int totalTrials;
     private int bothDetected;
 
     public Counts() {
         Acounts = new int[2];
+        settingcounts = new int[2][2];
         Bcounts = new int[2];
         plusplus = new int[2][2];
         detected = new int[2][2];
@@ -132,6 +134,17 @@ public class Counts implements Serializable {
        @param spinA spin=1 means +, spin=0 means -, spin <0 means not detected
        @param spinB spin=1 means +, spin=0 means -, spin <0 means not detected
      */
+    
+    public int getSettingA(int whichA){
+        return Acounts[whichA];
+    }
+    public int getSettingB(int whichB){
+        return Bcounts[whichB];
+    }
+     public int getSettingAB(int whichA, int whichB){
+        return settingcounts[whichA][whichB];
+    }
+     
     public void addResultOfOnePair(int whichA, int whichB, int spinA, int spinB) {
 
         totalTrials++;
@@ -145,7 +158,9 @@ public class Counts implements Serializable {
         if (spinB == 1) {
             singleB[whichB]++;
         }
-
+        settingcounts[whichA][whichB]++;
+        Acounts[whichA]++;
+        Bcounts[whichB]++;
         if (totalTrials < 10) {
             //   p("whichA: "+whichA+", whichB: "+whichB+", spinA: "+spinA+", spinB: "+spinB);
         }
