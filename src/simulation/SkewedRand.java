@@ -35,13 +35,15 @@ public class SkewedRand extends Rand {
 
     
     int counter;
+    double bias;
     static SkewedRand skewed;
   
-    public static Rand getRand(boolean reset) {
+    public static Rand getRand(boolean reset, double bias) {
         if (skewed == null) {
             skewed = new SkewedRand();
         }
         if (reset) skewed.counter = 0;
+        skewed.bias = bias;
         return skewed;
     }
 
@@ -49,6 +51,11 @@ public class SkewedRand extends Rand {
         super();
     }
 
+    @Override
+     public void setTrials(int trials) {
+        this.trials = trials;
+        this.counter = 0;
+    }
     
     /* Random int from from (inclusive) to to (inclusive) */
     @Override
@@ -59,11 +66,11 @@ public class SkewedRand extends Rand {
         
         double r = super.randDouble();
          if (p<0.5) {
-             if (r <0.6) return 0;
+             if (r <bias) return 0;
              else return 1;
          }
          else {
-              if (r <0.5) return 0;
+              if (r >bias) return 0;
              else return 1;
          }
         

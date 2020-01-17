@@ -88,7 +88,7 @@ public class Engine implements Serializable {
         if (fairGenerator) {
             rand = Rand.getRand();
         } else {
-            rand = SkewedRand.getRand(true);
+            rand = SkewedRand.getRand(true, 0.13);
         }
         rand.setSeed(settings.getSeed());
     }
@@ -281,6 +281,19 @@ public class Engine implements Serializable {
 
     }
 
+    public String getCountSummary() {
+        double tot = counts.getTotalTrials();
+        double a = counts.getSingleA();
+        double b = counts.getSingleB();
+        String s = "\nA1: " + counts.getSingleA(0) + ", A2: " + counts.getSingleA(1) + ", B1: " + counts.getSingleB(0) + ", B2: " + counts.getSingleB(1);
+        s += "\n% of A: A1%: " + counts.getSingleA(0) * 100 / a + ", A2%: " + counts.getSingleA(1) * 100 / a ;
+        s += "\n% of B: B1%: " + counts.getSingleB(0) * 100 / b + ", B2%: " + counts.getSingleB(1) * 100 / b;
+        s += "\n% of tot: A1%: " + counts.getSingleA(0) * 100 / tot + ", A2%: " + counts.getSingleA(1) * 100 / tot + ", B1%: " + counts.getSingleB(0) * 100 / tot + ", B2%: " + counts.getSingleB(1) * 100 / tot;
+        s += "\nA: " + a + ", " + counts.getPercentSingleA() + ", B: " + b + ", " + counts.getPercentSingleB();
+        return s;
+
+    }
+
     private void writeResults() {
         writeFile(log, "log.csv", true);
 
@@ -297,14 +310,23 @@ public class Engine implements Serializable {
         summary += "\nTotal count , " + counts.getTotalTrials() + "";
 
         List<Inequality> ins = new ArrayList<>();
-        ins.add(new CHSH());
-        ins.add(new Guistina2015());
-        ins.add(new CH());
+        ins.add(inequality);
+      //  ins.add(new Guistina2015());
+       // ins.add(new CH());
         for (Inequality in : ins) {
             in.setCounts(counts);
             summary += "\n\nInequality, " + in.getClass().getName() + ", the name of the class that contains the inequality formula";
             summary += in.computeString();
         }
+       // summary += getCountSummary();
+        return summary;
+    }
+
+    private String getSummary(Inequality in) {
+        in.setCounts(counts);
+        String summary = "\n\nInequality, " + in.getClass().getName() + ", the name of the class that contains the inequality formula";
+        summary += in.computeString();
+
         return summary;
     }
 
@@ -331,6 +353,81 @@ public class Engine implements Serializable {
         this.writeLog = writeLog;
     }
 
+    private void findRnd(Inequality in) {
+        double maxj = 0;
+        writeLog = false;
+
+        long count = 0;
+        for (double bias = 0.62; bias < 0.7; bias += 0.001) {
+
+            rand = SkewedRand.getRand(true, bias);
+            double j = run(10000, null, false);
+            count++;
+            boolean passed = in.isBroken(j);
+
+            String greenBold = "\033[34;1m";
+            String reset = "\033[0m";
+
+            if (!passed) {
+                greenBold = "";
+                reset = "";
+            }
+            p(count + ": " + greenBold + settings.toShortString() + ", j=" + j + reset
+                    + ", " + f.format(counts.getPercentBothDetected()) + "% detected, bias " + bias);
+            if (j > maxj * 0.8) {
+                in.setCounts(counts);
+                in.computeString();
+                rand = SkewedRand.getRand(true, bias);
+                double res = this.run(100000, null, false);
+                if (in.isBroken(res)) {
+                    p(getSummary(in));
+                    p(getCountSummary());
+                }
+
+            }
+        }
+
+    }
+
+    private void testRand(Inequality in, double bias) {
+        writeLog = false;
+
+        int positive = 0;
+        int tot = 100;
+
+        rand = SkewedRand.getRand(true, bias);
+        rand.setSeed(settings.getSeed());
+        for (int i = 0; i < tot; i++) {
+            counts = null;
+            
+            double j = run(10000, null, false);
+            boolean passed = in.isBroken(j);
+
+            if (passed) {
+                positive++;
+            }
+        }
+
+        double per = positive * 100.0 / (double) tot;
+        p("\n------------- Bias " + bias + ", positive " + per + "% (" + positive + " out of " + tot + ")");
+        if (per > 50) {
+            p(getCountSummary());
+            p(getSummary(in));
+            for (int t = 0; t < 10; t++) {
+                counts = null;
+                rand = SkewedRand.getRand(true, bias);
+               
+                double j = run(100000, null, false);
+                p("j:"+j);
+                if (j>0) {
+                    p(getCountSummary());
+                    p(getSummary(in));
+                }
+            }
+        }
+
+    }
+
     /* Main method and entry point for the program */
     public static void main(String[] args) {
 
@@ -340,11 +437,15 @@ public class Engine implements Serializable {
         Settings settings = new Settings();
         settings.setSeed(seed);
         settings.setTrials(trials);
-        Inequality in = new CH();
+        Inequality in = new Guistina2015();
         Engine engine = new Engine(new WangLHVModel(settings), in, false);
 
-        engine.findAngles(in);
+        // engine.findAngles(in);
         // engine.run(trials, null, false);
+        //engine.findRnd(in);
+        for (double bias = 0.1; bias < 0.21; bias += 0.01) {
+            engine.testRand(in, bias);
+        }
     }
 
 }

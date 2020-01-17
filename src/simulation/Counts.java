@@ -33,16 +33,20 @@ public class Counts implements Serializable {
     private int[] singleA;
     private int[] singleB;
     private int[][] detected;
-     private int[][] plusplus;
+    private int[][] plusplus;
     private int[][] tot;
     private int[][] coincidence;
     private int[][] det_zero;
     private int[][] zero_det;
+    private int[] Acounts;
+    private int[] Bcounts;
 
     private int totalTrials;
     private int bothDetected;
 
     public Counts() {
+        Acounts = new int[2];
+        Bcounts = new int[2];
         plusplus = new int[2][2];
         detected = new int[2][2];
         coincidence = new int[2][2];
@@ -85,7 +89,7 @@ public class Counts implements Serializable {
 
     /* @returns the percent of trials where only A had a detection event */
     public double getPercentSingleB() {
-        return (double) getSingleA() / (double) totalTrials * 100.0;
+        return (double) getSingleB() / (double) totalTrials * 100.0;
     }
 
     /* @returns the percent of trials where a detection was registered both at A and B */
@@ -141,9 +145,9 @@ public class Counts implements Serializable {
         if (spinB == 1) {
             singleB[whichB]++;
         }
-        
-        if (totalTrials <10) {
-         //   p("whichA: "+whichA+", whichB: "+whichB+", spinA: "+spinA+", spinB: "+spinB);
+
+        if (totalTrials < 10) {
+            //   p("whichA: "+whichA+", whichB: "+whichB+", spinA: "+spinA+", spinB: "+spinB);
         }
         if (!Adetected && !Bdetected) {
             // BOTH NOT DETECTED  - THEY ARE NOT RECORDED ANYWHERE          
@@ -158,14 +162,14 @@ public class Counts implements Serializable {
             if (spinA == spinB) {
                 coincidence[whichA][whichB]++;
             }
-            if (spinA == 1 && spinB ==1) {
+            if (spinA == 1 && spinB == 1) {
                 plusplus[whichA][whichB]++;
             }
         }
     }
-    
+
     private void p(String s) {
-        System.out.println("Counts: "+s);
+        System.out.println("Counts: " + s);
     }
 
 }

@@ -53,7 +53,7 @@ public class Simulation {
         int[][] values = null;
         long seed = 1234;
         String ineq = "G";
-        String model = "T";
+        String model = "W";
         String mode = "RESTART";
         String statefile = "saved.ser";
         String rand = "SKEWED";
