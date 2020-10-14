@@ -113,7 +113,7 @@ public class Guistina2015 extends Inequality implements Serializable {
         s += "\nFormula, J = N11(++) - N12(+0) - N21(0+) - N22(++)";
         s += "\nExplanation, if J > 0 is agrees with QM and if J <=0 it is a classical result\n";
 
-        s += "\nSetting, Count, % Setting, Scaled back to fair";
+        s += "\nSetting, Count, % Setting, Scaled back to be fair";
         s += "\nN11 ++, " + n11+", "+a1b1+", "+n11/a1b1*25.0;
         s += "\nN12 +0, " + n12+", "+a1b2+", "+n12/a1b2*25.0;
         s += "\nN21 0+, " + n21+", "+a2b1+", "+n21/a2b1*25.0;
